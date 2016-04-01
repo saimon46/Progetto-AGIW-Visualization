@@ -15,12 +15,10 @@
 		<h:form id="keyword" styleClass="form-horizontal">
 			<h:message for="insertKeyword" styleClass="error alert alert-danger" />
 			<div>
-				<h1>Chi vuoi cercare?</h1>
+				<h3><center>Chi vuoi cercare?</center></h3>
 			</div>
 			<div class="form-group">
-				<label for="keyword" class="col-sm-1 control-label col-lg-offset-4">Chi
-					vuoi cercare?</label>
-				<div class="col-sm-2">
+				<div class="col-sm-offset-5 col-sm-5">
 					<h:inputText styleClass="form-control"
 						value="#{documentsController.keyword}" required="true"
 						requiredMessage="Il campo e' obbligatorio!" id="keyword" />
