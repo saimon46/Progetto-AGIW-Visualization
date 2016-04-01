@@ -2,6 +2,8 @@ package controller;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 
 import model.JsonDoc;
 import model.JsonDocFacade;
@@ -9,29 +11,34 @@ import model.JsonImg;
 import model.JsonImgFacade;
 
 @ManagedBean
+@SessionScoped
 public class DocumentsController {
-
+	
 	private String keyword;
 	private String titleDoc;
 	private String titleImg;
 	
+	@ManagedProperty(value="#{docs}")
 	private JsonDoc docs;
+	
+	@ManagedProperty(value="#{imgs}")
 	private JsonImg imgs;
 	
-	@EJB(beanName="JsonDocFacade")
+	@EJB(beanName="jsonDocFacade")
 	private JsonDocFacade docFacade;
 	
-	@EJB(beanName="JsonImgFacade")
+	@EJB(beanName="jsonImgFacade")
 	private JsonImgFacade imgFacade;
 	
 	public String searchDocs() {
-		try{
-			this.docs = docFacade.searchDocs(keyword);
-			return "allDocs";
-		}catch(Exception e){
-			/*Keyword non trovata*/
-			return "errorSearch";
-		}
+		return "ciao";
+//		try{
+//			this.docs = docFacade.searchDocs(keyword);
+//			return "allDocs";
+//		}catch(Exception e){
+//			/*Keyword non trovata*/
+//			return "errorSearch";
+//		}
 	}
 	
 	public String searchImgs() {

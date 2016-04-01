@@ -3,7 +3,7 @@ package model;
 import javax.ejb.Stateless;
 
 
-@Stateless(name="JsonImgFacade")
+@Stateless(name="jsonImgFacade")
 public class JsonImgFacade {
 	
 	public JsonImg searchImgs(String keyword) {

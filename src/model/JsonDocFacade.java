@@ -3,7 +3,7 @@ package model;
 import javax.ejb.Stateless;
 
 
-@Stateless(name="JsonDocFacade")
+@Stateless(name="jsonDocFacade")
 public class JsonDocFacade {
 	
 	public JsonDoc searchDocs(String keyword) {

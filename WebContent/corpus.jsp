@@ -10,7 +10,7 @@
 <link href="css/bootstrap-theme.css" rel="stylesheet" type="text/css">
 </head>
 
-<body>>
+<body>
 <div align="center">
 		<f:view>
 			<h:form id="keyword" styleClass="form-horizontal">
