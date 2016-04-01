@@ -11,36 +11,35 @@
 </head>
 
 <body>
-<div align="center">
-		<f:view>
-			<h:form id="keyword" styleClass="form-horizontal">
-				<h:message for="insertKeyword" styleClass="error alert alert-danger" />
-				<div>
-					<h1>Chi vuoi cercare?</h1>
+	<div align="center">
+		<h:form id="keyword" styleClass="form-horizontal">
+			<h:message for="insertKeyword" styleClass="error alert alert-danger" />
+			<div>
+				<h1>Chi vuoi cercare?</h1>
+			</div>
+			<div class="form-group">
+				<label for="keyword" class="col-sm-1 control-label col-lg-offset-4">Chi
+					vuoi cercare?</label>
+				<div class="col-sm-2">
+					<h:inputText styleClass="form-control"
+						value="#{documentsController.keyword}" required="true"
+						requiredMessage="Il campo e' obbligatorio!" id="keyword" />
+					<h:message for="keyword" style="color:red" />
 				</div>
-				<div class="form-group">
-					<label for="keyword" class="col-sm-1 control-label col-lg-offset-4">Chi vuoi cercare?</label>
-					<div class="col-sm-2">
-						<h:inputText styleClass="form-control"
-							value="#{documentsController.keyword}" required="true"
-							requiredMessage="Il campo e' obbligatorio!" id="keyword" />
-						<h:message for="keyword" style="color:red" />
-					</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-5 col-sm-2">
+					<h:commandButton id="searchDoc" styleClass="btn btn-success"
+						value="Cerca Documenti" action="#{documentsController.searchDocs}" />
 				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-5 col-sm-2">
-						<h:commandButton id="searchDoc" styleClass="btn btn-success" value="Cerca Documenti"
-							action="#{documentsController.searchDocs}" />
-					</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-5 col-sm-2">
+					<h:commandButton id="searchImage" styleClass="btn btn-success"
+						value="Cerca Immagini" action="#{documentsController.searchImgs}" />
 				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-5 col-sm-2">
-						<h:commandButton id="searchImage" styleClass="btn btn-success" value="Cerca Immagini"
-							action="#{documentsController.searchImgs}" />
-					</div>
-				</div>
-			</h:form>
-		</f:view>
+			</div>
+		</h:form>
 	</div>
 </body>
 

@@ -11,7 +11,6 @@
 </head>
 <body>
 	<f:view>
-
 		<div align="center">
 			<h1>GBD SEARCH</h1>
 		</div>

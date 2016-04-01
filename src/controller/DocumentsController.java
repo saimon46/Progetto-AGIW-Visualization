@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -18,11 +20,12 @@ public class DocumentsController {
 	private String titleDoc;
 	private String titleImg;
 	
-	@ManagedProperty(value="#{docs}")
-	private JsonDoc docs;
 	
-	@ManagedProperty(value="#{imgs}")
-	private JsonImg imgs;
+	//@ManagedProperty(value="#{docs}")
+	private List<JsonDoc> docs;
+	
+	//@ManagedProperty(value="#{imgs}")
+	private List<JsonImg> imgs;
 	
 	@EJB(beanName="jsonDocFacade")
 	private JsonDocFacade docFacade;
@@ -31,19 +34,18 @@ public class DocumentsController {
 	private JsonImgFacade imgFacade;
 	
 	public String searchDocs() {
-		return "ciao";
-//		try{
-//			this.docs = docFacade.searchDocs(keyword);
-//			return "allDocs";
-//		}catch(Exception e){
-//			/*Keyword non trovata*/
-//			return "errorSearch";
-//		}
+		try{
+			this.docs.add(docFacade.searchDocs(keyword));
+			return "allDocs";
+		}catch(Exception e){
+			/*Keyword non trovata*/
+			return "errorSearch";
+		}
 	}
 	
 	public String searchImgs() {
 		try{
-			this.imgs = imgFacade.searchImgs(keyword);
+			this.imgs.add(imgFacade.searchImgs(keyword));
 			return "allImgs";
 		}catch(Exception e){
 			/*Keyword non trovata*/
@@ -77,19 +79,19 @@ public class DocumentsController {
 		this.titleImg = titleImg;
 	}
 
-	public JsonDoc getDocs() {
+	public List<JsonDoc> getDocs() {
 		return docs;
 	}
 
-	public void setDocs(JsonDoc docs) {
+	public void setDocs(List<JsonDoc> docs) {
 		this.docs = docs;
 	}
 
-	public JsonImg getImgs() {
+	public List<JsonImg> getImgs() {
 		return imgs;
 	}
 
-	public void setImgs(JsonImg imgs) {
+	public void setImgs(List<JsonImg> imgs) {
 		this.imgs = imgs;
 	}
 }
