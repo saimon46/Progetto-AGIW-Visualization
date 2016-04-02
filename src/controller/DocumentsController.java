@@ -20,10 +20,10 @@ public class DocumentsController {
 	private String titleImg;
 	
 	
-	//@ManagedProperty(value="#{docs}")
+	@ManagedProperty(value="#{docs}")
 	private JsonDoc docs;
 	
-	//@ManagedProperty(value="#{imgs}")
+	@ManagedProperty(value="#{imgs}")
 	private JsonImg imgs;
 	
 	@EJB(beanName="jsonDocFacade")

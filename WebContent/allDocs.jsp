@@ -13,12 +13,14 @@
 	<f:view>
 		<div align="center">
 			<div>
-				Keyword usata:
-				${docs.title}
+				Keyword Doc usata:
+				<h1>${documentsController.docs.title}</h1>
+			</div>
+			<div>
+			<h5>Che e' successo? Viene creato un oggetto JsonDoc col titolo in base alla keyword 
+				e stampato il suo attributo. Passo successivo: Manipolare il Json di Elastic</h5>
 			</div>
 		</div>
-	</f:view>
-	
-	
+	</f:view>	
 </body>
 </html>

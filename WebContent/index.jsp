@@ -12,14 +12,14 @@
 <body>
 	<f:view>
 		<div align="center">
-			<h1>GBD SEARCH</h1>
+			<h1><b>GBD SEARCH</b></h1>
 		</div>
 		<jsp:include page="corpus.jsp" />
 		<div class="text-right col-md-6 col-md-offset-6">
 			<h5><em>CREDITI:</em></h5>
 			<h5><em>Brundu Simone Matr: 452236</em></h5>
 			<h5><em>Guarino Aniello Matr: 451639</em></h5>
-			<h5><em>D'Ambrosio Tommaso Matr: ?????</em></h5>
+			<h5><em>D'Ambrosio Tommaso Matr: Tomma' caccia' la matricola</em></h5>
 			<h5><em><strong>Universita' degli Studi Roma Tre</strong></em></h5>
 		</div>
 	</f:view>

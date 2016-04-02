@@ -18,7 +18,7 @@
 				<h3><center>Chi vuoi cercare?</center></h3>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-5 col-sm-5">
+				<div class="col-sm-offset-4 col-sm-4">
 					<h:inputText styleClass="form-control"
 						value="#{documentsController.keyword}" required="true"
 						requiredMessage="Il campo e' obbligatorio!" id="keyword" />
@@ -26,13 +26,11 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-5 col-sm-2">
+				<div class="col-sm-offset-4 col-sm-2">
 					<h:commandButton id="searchDoc" styleClass="btn btn-success"
 						value="Cerca Documenti" action="#{documentsController.searchDocs}" />
 				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-5 col-sm-2">
+				<div class="col-sm-2">
 					<h:commandButton id="searchImage" styleClass="btn btn-success"
 						value="Cerca Immagini" action="#{documentsController.searchImgs}" />
 				</div>
