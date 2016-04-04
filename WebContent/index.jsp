@@ -19,8 +19,8 @@
 			<h5><em>CREDITI:</em></h5>
 			<h5><em>Brundu Simone Matr: 452236</em></h5>
 			<h5><em>Guarino Aniello Matr: 451639</em></h5>
-			<h5><em>D'Ambrosio Tommaso Matr: Tomma' caccia' la matricola</em></h5>
-			<h5><em><strong>Universita' degli Studi Roma Tre</strong></em></h5>
+			<h5><em>D'Ambrosio Tommaso Matr: 492178</em></h5>
+			<h5><em><strong>Universita' degli Studi Roma Tre (a.a 2015/2016)</strong></em></h5>
 		</div>
 	</f:view>
 </body>

@@ -12,13 +12,12 @@
 
 <body>
 	<f:view>
+	<jsp:include page="header.jsp" />
 		<div align="center">
 			<div>
 				<c:forEach var="doc" items="#{documentsController.docs}">
-						<tr>
-							<td>${doc.score}</td>
-							<td>${doc.doc.title}</td>
-						</tr>
+						<tr><td><b>${doc.score}</b></td></tr>
+						<tr><td>${doc.doc.title}</td></tr><br>
 					</c:forEach>
 			</div>
 		</div>

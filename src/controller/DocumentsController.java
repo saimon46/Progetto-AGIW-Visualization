@@ -61,13 +61,16 @@ public class DocumentsController {
 				MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
 				this.docs.add(curr);
 			}
-
+			
 			node.close();
 			
-			return "allDocs";
+			if(this.docs.isEmpty())
+				return "errorSearch"; /*Keyword non trovata*/
+			else 
+				return "allDocs";
 
 		}catch(Exception e){
-			/*Keyword non trovata*/
+			/*Errore*/
 			return "errorSearch";
 		}
 	}
@@ -84,7 +87,7 @@ public class DocumentsController {
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword))
-					.setQuery(QueryBuilders.matchQuery("ContentIndex", keyword)) 
+					.setQuery(QueryBuilders.matchQuery("ContentSource", keyword)) 
 					.setFrom(0).setSize(10).setExplain(true)  //First 10 Imgs
 					.execute()
 					.actionGet();
@@ -102,11 +105,14 @@ public class DocumentsController {
 			}
 
 			node.close();
-
-			return "allImgs";
-
+			
+			if(this.imgs.isEmpty())
+				return "errorSearch"; /*Keyword non trovata*/
+			else 
+				return "allImgs";
+			
 		}catch(Exception e){
-			/*Keyword non trovata*/
+			/*Errore*/
 			return "errorSearch";
 		}
 	}

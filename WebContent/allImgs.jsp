@@ -9,13 +9,12 @@
 
 <body>
 	<f:view>
+	<jsp:include page="header.jsp" />
 		<div align="center">
 			<div>
 				<c:forEach var="img" items="#{documentsController.imgs}">
-						<tr>
-							<td>${img.score}</td>
-							<td>${img.img.titleSource}</td>
-						</tr>
+						<tr><td><b>${img.score}</b></td></tr>
+						<tr><td>${img.img.titleSource}</td></tr><br>
 					</c:forEach>
 			</div>
 		</div>

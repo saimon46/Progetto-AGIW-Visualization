@@ -7,10 +7,10 @@
 
 <body>
 	<f:view>
-		<jsp:include page="corpus.jsp" />
+		<jsp:include page="header.jsp" />
 		<div align="center">
 			<div>
-				<h2>La ricerca non ha avuto alcun esito...</h2>
+				<h3>La ricerca non ha avuto alcun esito...</h3>
 			</div>
 		</div>
 	</f:view>
