@@ -1,5 +1,6 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core"%>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
@@ -13,12 +14,12 @@
 	<f:view>
 		<div align="center">
 			<div>
-				Keyword Doc usata:
-				<h1>${documentsController.docs.title}</h1>
-			</div>
-			<div>
-			<h5>Che e' successo? Viene creato un oggetto JsonDoc col titolo in base alla keyword 
-				e stampato il suo attributo. Passo successivo: Manipolare il Json di Elastic</h5>
+				<c:forEach var="doc" items="#{documentsController.docs}">
+						<tr>
+							<td>${doc.score}</td>
+							<td>${doc.doc.title}</td>
+						</tr>
+					</c:forEach>
 			</div>
 		</div>
 	</f:view>	
