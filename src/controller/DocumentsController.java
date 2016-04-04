@@ -1,6 +1,5 @@
 package controller;
 
-import service.ClientProvider;
 import java.util.*;
 
 import javax.faces.bean.ManagedBean;
@@ -9,8 +8,12 @@ import javax.faces.bean.SessionScoped;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
+
+import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
 import model.*;
 
@@ -31,12 +34,13 @@ public class DocumentsController {
 	
 	public String searchDocs() {
 
-		ClientProvider.instance().getClient().admin().indices().prepareRefresh().execute().actionGet();
+		Node node = nodeBuilder().node();
+		Client client = node.client();
 		
 		this.docs = new ArrayList<MetaDoc>();
 
 		try{			
-			SearchResponse response = ClientProvider.instance().getClient().prepareSearch(indexDoc)
+			SearchResponse response = client.prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword)) // Query
@@ -58,7 +62,7 @@ public class DocumentsController {
 				this.docs.add(curr);
 			}
 
-			ClientProvider.instance().closeNode();
+			node.close();
 			
 			return "allDocs";
 
@@ -70,12 +74,13 @@ public class DocumentsController {
 
 	public String searchImgs() {
 
-		ClientProvider.instance().getClient().admin().indices().prepareRefresh().execute().actionGet();
+		Node node = nodeBuilder().node();
+		Client client = node.client();
 		
 		this.imgs = new ArrayList<MetaImg>();
 
 		try{			
-			SearchResponse response = ClientProvider.instance().getClient().prepareSearch(indexImg)
+			SearchResponse response = client.prepareSearch(indexImg)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword))
@@ -96,7 +101,7 @@ public class DocumentsController {
 				this.imgs.add(curr);
 			}
 
-			ClientProvider.instance().closeNode();
+			node.close();
 
 			return "allImgs";
 
