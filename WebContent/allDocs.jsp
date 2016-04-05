@@ -18,16 +18,6 @@
 			<tr>
 				<td>
 					<div class="col-sm-offset-1">
-						<h4>Macro Categorie associate</h4>
-						<c:forEach var="cat"
-							items="#{documentsController.categorybyKeyword}">
-						${cat.key} (${cat.value})
-						<br>
-						</c:forEach>
-					</div>
-				</td>
-				<td>
-					<div class="col-sm-offset-1">
 						<c:forEach var="document" items="#{documentsController.docs}">
 							<table>
 								<!-- <c:if test="${document.doc.title == ''}"><i>Senza Titolo</i></c:if> -->
@@ -45,6 +35,16 @@
 							<br>
 						</c:forEach>
 
+					</div>
+				</td>
+				<td>
+					<div class="col-sm-offset-1">
+						<h4>Macro Categorie associate</h4>
+						<c:forEach var="cat"
+							items="#{documentsController.categorybyKeyword}">
+						${cat.key} (${cat.value})
+						<br>
+						</c:forEach>
 					</div>
 				</td>
 			</tr>
