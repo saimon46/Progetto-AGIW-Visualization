@@ -140,13 +140,14 @@ public class DocumentsController {
 						(String)hit.getSource().get("ContentIndex"),
 						(String)hit.getSource().get("Category"));
 
-				StringTokenizer mainCategory = new StringTokenizer(doc.getCategory(), "-");
+				StringTokenizer tokenCategory = new StringTokenizer(doc.getCategory(), " - ");
+				String mainCategory = tokenCategory.nextToken();
 				int value = 0;
-				if (this.categorybyKeyword.containsKey(mainCategory.toString())){
-					 value = this.categorybyKeyword.get(mainCategory.toString()) +1;
-					this.categorybyKeyword.put(mainCategory.toString(), value);
+				if (this.categorybyKeyword.containsKey(mainCategory)){
+					 value = this.categorybyKeyword.get(mainCategory) +1;
+					this.categorybyKeyword.put(mainCategory, value);
 				}else
-					this.categorybyKeyword.put(mainCategory.toString(), 1);
+					this.categorybyKeyword.put(mainCategory, 1);
 				
 			}
 			
