@@ -27,7 +27,6 @@ public class DocumentsController {
 	private String keyword;
 	private final String indexDoc = "indexdoc";
 	
-	private int previousPages;
 	private int nextPages;
 
 	@ManagedProperty(value="#{docs}")
@@ -38,25 +37,21 @@ public class DocumentsController {
 	
 	
 	public String addPages() {
-		this.previousPages += 10;
 		this.nextPages += 10;
 		if(!this.docs.isEmpty()){
 			this.docs.clear();
-			this.setDocs(docs);
 		}
 		return searchDocs();
 			
 	}
 	
 	public String removePages() {
-		if(this.previousPages == 0 && this.nextPages == 10)
+		if(this.nextPages == 0)
 			return "index";
 		else{
-			this.previousPages -= 10;
 			this.nextPages -= 10;
 			if(!this.docs.isEmpty()){
 				this.docs.clear();
-				this.setDocs(docs);
 			}
 			
 			return searchDocs();
@@ -65,8 +60,7 @@ public class DocumentsController {
 	
 	public String searchDocs_begin() {
 		//THIS SET OR RESET THE FIRST 10 DOCS
-		this.previousPages = 0;
-		this.nextPages = 10;
+		this.nextPages = 0;
 		this.docs = new ArrayList<MetaDoc>();
 		if(!this.docs.isEmpty())
 			this.docs.clear();
@@ -88,7 +82,7 @@ public class DocumentsController {
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword)) // Query
 					.setQuery(QueryBuilders.matchQuery("ContentIndex", keyword))
-					.setFrom(previousPages).setSize(nextPages).setExplain(true) //10 docs
+					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
 
@@ -185,14 +179,6 @@ public class DocumentsController {
 
 	public void setDocs(List<MetaDoc> docs) {
 		this.docs = docs;
-	}
-
-	public int getPreviousPages() {
-		return previousPages;
-	}
-
-	public void setPreviousPages(int previousPages) {
-		this.previousPages = previousPages;
 	}
 
 	public int getNextPages() {

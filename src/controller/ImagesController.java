@@ -25,14 +25,12 @@ public class ImagesController {
 	private String keyword;
 	private final String indexImg = "indeximg";
 	
-	private int previousPages;
 	private int nextPages;
 
 	@ManagedProperty(value="#{imgs}")
 	private List<MetaImg> imgs;
 	
 	public String addPages() {
-		this.previousPages += 10;
 		this.nextPages += 10;
 		if(!this.imgs.isEmpty()){
 			this.imgs.clear();
@@ -42,10 +40,9 @@ public class ImagesController {
 	}
 	
 	public String removePages() {
-		if(this.previousPages == 0 && this.nextPages == 10)
+		if(this.nextPages == 0)
 			return "index";
 		else{
-			this.previousPages -= 10;
 			this.nextPages -= 10;
 			if(!this.imgs.isEmpty()){
 				this.imgs.clear();
@@ -57,8 +54,7 @@ public class ImagesController {
 	
 	public String searchImgs_begin() {
 		//THIS SET OR RESET THE FIRST 10 IMGS
-		this.previousPages = 0;
-		this.nextPages = 10;
+		this.nextPages = 0;
 		this.imgs = new ArrayList<MetaImg>();
 		if(!this.imgs.isEmpty())
 			this.imgs.clear();
@@ -77,7 +73,7 @@ public class ImagesController {
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword))
 					.setQuery(QueryBuilders.matchQuery("ContentSource", keyword)) 
-					.setFrom(previousPages).setSize(nextPages).setExplain(true)  //10 Imgs
+					.setFrom(nextPages).setSize(10).setExplain(true)  //10 Imgs
 					.execute()
 					.actionGet();
 
@@ -122,14 +118,6 @@ public class ImagesController {
 
 	public void setImgs(List<MetaImg> imgs) {
 		this.imgs = imgs;
-	}
-
-	public int getPreviousPages() {
-		return previousPages;
-	}
-
-	public void setPreviousPages(int previousPages) {
-		this.previousPages = previousPages;
 	}
 
 	public int getNextPages() {
