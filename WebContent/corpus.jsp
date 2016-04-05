@@ -21,8 +21,8 @@
 			<div class="form-group">
 				<div class="col-sm-offset-4 col-sm-4">
 					<h:inputText styleClass="form-control"
-						value="#{documentsController.keyword}" required="true"
-						requiredMessage="Il campo e' obbligatorio!" id="keyword" />
+						value="#{keywordsearch}" required="true"
+						requiredMessage="Il campo e' obbligatorio!" id="keyword"/>
 					<h:message for="keyword" style="color:red" />
 					<h:inputHidden value="#{imagesController.keyword}" id="keywordImg" />
 				</div>
@@ -30,11 +30,17 @@
 			<div class="form-group">
 				<div class="col-sm-offset-4 col-sm-2">
 					<h:commandButton id="searchDoc" styleClass="btn btn-success"
-						value="Cerca Documenti" action="#{documentsController.searchDocs_begin}" />
+						value="Cerca Documenti" action="#{documentsController.searchDocs_begin}" >
+						<f:setPropertyActionListener target="#{documentsController.keyword}" value="#{keywordsearch}" />
+						<f:setPropertyActionListener target="#{imagesController.keyword}" value="#{keywordsearch}" />
+						</h:commandButton>
 				</div>
 				<div class="col-sm-2">
 					<h:commandButton id="searchImage" styleClass="btn btn-success"
-						value="Cerca Immagini" action="#{imagesController.searchImgs_begin}" />
+						value="Cerca Immagini" action="#{imagesController.searchImgs_begin}" >
+						<f:setPropertyActionListener target="#{documentsController.keyword}" value="#{keywordsearch}" />
+						<f:setPropertyActionListener target="#{imagesController.keyword}" value="#{keywordsearch}" />
+						</h:commandButton>
 				</div>
 			</div>
 		</h:form>
