@@ -12,25 +12,16 @@
 
 <body>
 	<div align="left">
-		<h:form id="keyword" styleClass="form-horizontal">
+		<h:form id="bottons" styleClass="form-horizontal">
 		<br><br>
-			<h:message for="insertKeyword" styleClass="error alert alert-danger" />
-			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-4">
-					<h:inputText styleClass="form-control"
-						value="#{keywordController.keyword}" required="true"
-						requiredMessage="Il campo e' obbligatorio!" id="keyword" />
-					<h:message for="keyword" style="color:red" />
-				</div>
-			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-1 col-sm-2">
-					<h:commandButton id="searchDoc" styleClass="btn btn-success"
-						value="Cerca Documenti" action="#{documentsController.searchDocs_begin}" />
+					<h:commandButton id="Imgback" styleClass="btn btn-success"
+						value="Indietro" action="#{imagesController.removePages}" />
 				</div>
 				<div class="col-sm-2">
-					<h:commandButton id="searchImage" styleClass="btn btn-success"
-						value="Cerca Immagini" action="#{imagesController.searchImgs}" />
+					<h:commandButton id="Imgnext" styleClass="btn btn-success"
+						value="Avanti" action="#{imagesController.addPages}" />
 				</div>
 			</div>
 		</h:form>

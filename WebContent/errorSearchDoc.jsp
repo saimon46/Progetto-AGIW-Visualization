@@ -7,12 +7,15 @@
 
 <body>
 	<f:view>
+	<br><br>
 		<jsp:include page="header.jsp" />
-		<div align="center">
-			<div>
-				<h3>La ricerca non ha avuto alcun esito...</h3>
+		<div align="left">
+			<div class="col-sm-offset-1">
+				<h3>La ricerca dei documenti non ha avuto alcun esito...</h3>
 			</div>
 		</div>
+	<br><br>
+	<jsp:include page="backDoc.jsp" />
 	</f:view>
 </body>
 </html>

@@ -10,14 +10,20 @@
 <body>
 	<f:view>
 	<jsp:include page="header.jsp" />
-		<div align="center">
-			<div>
-				<c:forEach var="img" items="#{documentsController.imgs}">
-						<tr><td><b>${img.score}</b></td></tr>
-						<tr><td>${img.img.titleSource}</td></tr><br>
-					</c:forEach>
+	<br><br>
+		<div align="left">
+			<div class="col-sm-offset-1">
+				<c:forEach var="image" items="#{imagesController.imgs}">
+					<table>
+						<tr><td><font color="blue">${image.img.titleSource}</font> (Score: <b>${image.score}</b>)</td></tr>
+						<tr><td><font color="green">${image.img.urlSource}</font></td></tr>
+					</table>
+				<br><br>
+				</c:forEach>
+				
 			</div>
 		</div>
+	<jsp:include page="bottonsImg.jsp" />
 	</f:view>	
 </body>
 </html>

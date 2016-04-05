@@ -15,7 +15,10 @@ import org.elasticsearch.search.SearchHit;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
+import java.util.StringTokenizer;
+
 import model.*;
+
 
 @ManagedBean
 @SessionScoped
@@ -23,29 +26,69 @@ public class DocumentsController {
 
 	private String keyword;
 	private final String indexDoc = "indexdoc";
-	private final String indexImg = "indeximg";
+	
+	private int previousPages;
+	private int nextPages;
 
 	@ManagedProperty(value="#{docs}")
 	private List<MetaDoc> docs;
-
-	@ManagedProperty(value="#{imgs}")
-	private List<MetaImg> imgs;
-
+	
+	@ManagedProperty(value="#{categorybyKeyword}")
+	private Map<String, Integer> categorybyKeyword = new HashMap<String, Integer>();
+	
+	
+	public String addPages() {
+		this.previousPages += 10;
+		this.nextPages += 10;
+		if(!this.docs.isEmpty()){
+			this.docs.clear();
+			this.setDocs(docs);
+		}
+		return searchDocs();
+			
+	}
+	
+	public String removePages() {
+		if(this.previousPages == 0 && this.nextPages == 10)
+			return "index";
+		else{
+			this.previousPages -= 10;
+			this.nextPages -= 10;
+			if(!this.docs.isEmpty()){
+				this.docs.clear();
+				this.setDocs(docs);
+			}
+			
+			return searchDocs();
+		}
+	}
+	
+	public String searchDocs_begin() {
+		//THIS SET OR RESET THE FIRST 10 DOCS
+		this.previousPages = 0;
+		this.nextPages = 10;
+		this.docs = new ArrayList<MetaDoc>();
+		if(!this.docs.isEmpty())
+			this.docs.clear();
+		
+		//THIS RUN TOTAL QUERY FOR THE CATEGORIES BY KEYWORD
+		this.searchCategories();
+		
+		return searchDocs();
+	}
 	
 	public String searchDocs() {
 
 		Node node = nodeBuilder().node();
 		Client client = node.client();
 		
-		this.docs = new ArrayList<MetaDoc>();
-
-		try{			
+		try{
 			SearchResponse response = client.prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword)) // Query
 					.setQuery(QueryBuilders.matchQuery("ContentIndex", keyword))
-					.setFrom(0).setSize(10).setExplain(true) //First 10 docs
+					.setFrom(previousPages).setSize(nextPages).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
 
@@ -65,59 +108,71 @@ public class DocumentsController {
 			node.close();
 			
 			if(this.docs.isEmpty())
-				return "errorSearch"; /*Keyword non trovata*/
+				return "errorSearchDoc"; /*Keyword non trovata*/
 			else 
 				return "allDocs";
 
 		}catch(Exception e){
 			/*Errore*/
-			return "errorSearch";
+			return "index";
 		}
 	}
-
-	public String searchImgs() {
-
+	
+	public void searchCategories() {
 		Node node = nodeBuilder().node();
 		Client client = node.client();
 		
-		this.imgs = new ArrayList<MetaImg>();
-
-		try{			
-			SearchResponse response = client.prepareSearch(indexImg)
+		try{
+			SearchResponse response = client.prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.matchQuery("Keyword", keyword))
-					.setQuery(QueryBuilders.matchQuery("ContentSource", keyword)) 
-					.setFrom(0).setSize(10).setExplain(true)  //First 10 Imgs
+					.setQuery(QueryBuilders.matchQuery("Keyword", keyword)) // Query
+					.setQuery(QueryBuilders.matchQuery("ContentIndex", keyword))
 					.execute()
 					.actionGet();
 
 			for (SearchHit hit : response.getHits()) {
-				Img img = new Img((String)hit.getSource().get("Keyword"),
-						(String)hit.getSource().get("URLImg"),
-						(String)hit.getSource().get("URLSource"),
-						(String)hit.getSource().get("TitleSource"),
-						(String)hit.getSource().get("ContentSource"),
+				Doc doc = new Doc((String)hit.getSource().get("Keyword"),
+						(String)hit.getSource().get("URL"),
+						(String)hit.getSource().get("Title"),
+						(String)hit.getSource().get("Description"),
+						(String)hit.getSource().get("ContentHTML"),
+						(String)hit.getSource().get("ContentIndex"),
 						(String)hit.getSource().get("Category"));
 
-				MetaImg curr = new MetaImg(img,(double)hit.getScore());
-				this.imgs.add(curr);
+				StringTokenizer mainCategory = new StringTokenizer(doc.getCategory(), "-");
+				int value = 0;
+				if (this.categorybyKeyword.containsKey(mainCategory.toString())){
+					 value = this.categorybyKeyword.get(mainCategory.toString()) +1;
+					this.categorybyKeyword.put(mainCategory.toString(), value);
+				}else
+					this.categorybyKeyword.put(mainCategory.toString(), 1);
+				
 			}
-
+			
 			node.close();
-			
-			if(this.imgs.isEmpty())
-				return "errorSearch"; /*Keyword non trovata*/
-			else 
-				return "allImgs";
-			
+
 		}catch(Exception e){
-			/*Errore*/
-			return "errorSearch";
+		
 		}
 	}
-
+	
+	
+	
 	//Getters and Setters
+
+	
+	public List<MetaDoc> getDocs() {
+		return docs;
+	}
+
+	public Map<String, Integer> getCategorybyKeyword() {
+		return categorybyKeyword;
+	}
+
+	public void setCategorybyKeyword(Map<String, Integer> categorybyKeyword) {
+		this.categorybyKeyword = categorybyKeyword;
+	}
 
 	public String getKeyword() {
 		return keyword;
@@ -127,19 +182,23 @@ public class DocumentsController {
 		this.keyword = keyword;
 	}
 
-	public List<MetaDoc> getDocs() {
-		return docs;
-	}
-
 	public void setDocs(List<MetaDoc> docs) {
 		this.docs = docs;
 	}
 
-	public List<MetaImg> getImgs() {
-		return imgs;
+	public int getPreviousPages() {
+		return previousPages;
 	}
 
-	public void setImgs(List<MetaImg> imgs) {
-		this.imgs = imgs;
+	public void setPreviousPages(int previousPages) {
+		this.previousPages = previousPages;
+	}
+
+	public int getNextPages() {
+		return nextPages;
+	}
+
+	public void setNextPages(int nextPages) {
+		this.nextPages = nextPages;
 	}
 }

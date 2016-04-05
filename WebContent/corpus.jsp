@@ -1,5 +1,6 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core"%>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,16 +24,17 @@
 						value="#{documentsController.keyword}" required="true"
 						requiredMessage="Il campo e' obbligatorio!" id="keyword" />
 					<h:message for="keyword" style="color:red" />
+					<h:inputHidden value="#{imagesController.keyword}" id="keywordImg" />
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-4 col-sm-2">
 					<h:commandButton id="searchDoc" styleClass="btn btn-success"
-						value="Cerca Documenti" action="#{documentsController.searchDocs}" />
+						value="Cerca Documenti" action="#{documentsController.searchDocs_begin}" />
 				</div>
 				<div class="col-sm-2">
 					<h:commandButton id="searchImage" styleClass="btn btn-success"
-						value="Cerca Immagini" action="#{documentsController.searchImgs}" />
+						value="Cerca Immagini" action="#{imagesController.searchImgs_begin}" />
 				</div>
 			</div>
 		</h:form>

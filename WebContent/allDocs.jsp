@@ -13,14 +13,34 @@
 <body>
 	<f:view>
 	<jsp:include page="header.jsp" />
-		<div align="center">
-			<div>
-				<c:forEach var="doc" items="#{documentsController.docs}">
-						<tr><td><b>${doc.score}</b></td></tr>
-						<tr><td>${doc.doc.title}</td></tr><br>
-					</c:forEach>
+	<br>
+		<div align="right">
+			<div class="col-sm-offset-1">
+				<h4>Macro Categorie associate</h4>
+				<c:forEach var="cat" items="#{documentsController.categorybyKeyword}">
+					<table>
+   						<tr><td>${cat.key}</td><td> ${cat.value}</td></tr>
+   					</table>
+				</c:forEach>
 			</div>
 		</div>
+		<br>
+		<div align="left">
+			<div class="col-sm-offset-1">
+				<c:forEach var="document" items="#{documentsController.docs}">
+					<table>
+					
+					<!-- <c:if test="${document.doc.title == ''}"><i>Senza Titolo</i></c:if> -->
+						<tr><td><font color="blue"><a href="html.jsp">${document.doc.title}</a></font> (Score: <b>${document.score}</b>)</td>
+						<tr><td><font color="green">${document.doc.url}</font></td></tr>
+						<tr><td>${document.doc.description}</td></tr>
+					</table>
+				<br><br>
+				</c:forEach>
+				
+			</div>
+		</div>
+	<jsp:include page="bottonsDoc.jsp" />
 	</f:view>	
 </body>
 </html>

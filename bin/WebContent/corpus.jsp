@@ -11,26 +11,28 @@
 </head>
 
 <body>
-	<div align="left">
+	<div align="center">
 		<h:form id="keyword" styleClass="form-horizontal">
-		<br><br>
 			<h:message for="insertKeyword" styleClass="error alert alert-danger" />
+			<div>
+				<h3><center>Chi vuoi cercare?</center></h3>
+			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-4">
+				<div class="col-sm-offset-4 col-sm-4">
 					<h:inputText styleClass="form-control"
-						value="#{keywordController.keyword}" required="true"
+						value="#{documentsController.keyword}" required="true"
 						requiredMessage="Il campo e' obbligatorio!" id="keyword" />
 					<h:message for="keyword" style="color:red" />
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-2">
+				<div class="col-sm-offset-4 col-sm-2">
 					<h:commandButton id="searchDoc" styleClass="btn btn-success"
-						value="Cerca Documenti" action="#{documentsController.searchDocs_begin}" />
+						value="Cerca Documenti" action="#{documentsController.searchDocs}" />
 				</div>
 				<div class="col-sm-2">
 					<h:commandButton id="searchImage" styleClass="btn btn-success"
-						value="Cerca Immagini" action="#{imagesController.searchImgs}" />
+						value="Cerca Immagini" action="#{documentsController.searchImgs}" />
 				</div>
 			</div>
 		</h:form>
