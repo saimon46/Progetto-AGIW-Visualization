@@ -33,14 +33,14 @@
 						value="Cerca Documenti" action="#{documentsController.searchDocs_begin}" >
 						<f:setPropertyActionListener target="#{documentsController.keyword}" value="#{keywordsearch}" />
 						<f:setPropertyActionListener target="#{imagesController.keyword}" value="#{keywordsearch}" />
-						</h:commandButton>
+					</h:commandButton>
 				</div>
 				<div class="col-sm-2">
 					<h:commandButton id="searchImage" styleClass="btn btn-success"
 						value="Cerca Immagini" action="#{imagesController.searchImgs_begin}" >
 						<f:setPropertyActionListener target="#{documentsController.keyword}" value="#{keywordsearch}" />
 						<f:setPropertyActionListener target="#{imagesController.keyword}" value="#{keywordsearch}" />
-						</h:commandButton>
+					</h:commandButton>
 				</div>
 			</div>
 		</h:form>
