@@ -24,6 +24,7 @@ public class DocumentsController {
 
 	private String keyword;
 	private final String indexDoc = "indexdoc";
+	private final String indexCatDoc = "indexcatdoc";
 
 	private int nextPages;
 
@@ -85,12 +86,12 @@ public class DocumentsController {
 					.actionGet();
 
 			for (SearchHit hit : response.getHits()) {
-				Doc doc = new Doc((String)hit.getSource().get("Keyword"),
+						Doc doc = new Doc((String)hit.getSource().get("Keyword"),
 						(String)hit.getSource().get("URL"),
 						(String)hit.getSource().get("Title"),
 						(String)hit.getSource().get("Description"),
-						(String)hit.getSource().get("ContentHTML"),
-						(String)hit.getSource().get("ContentIndex"),
+						"",
+						"",
 						(String)hit.getSource().get("Category"));
 
 				MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
@@ -117,7 +118,7 @@ public class DocumentsController {
 		this.categorybyKeyword = new HashMap<String, Integer>();
 
 		try{
-			SearchResponse response = client.prepareSearch(indexDoc)
+			SearchResponse response = client.prepareSearch(indexCatDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.queryString(keyword).field("Keyword")) // Query

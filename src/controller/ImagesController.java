@@ -69,7 +69,7 @@ public class ImagesController {
 		
 		try{	
 			SearchResponse response = client.prepareSearch(indexImg)
-					.setTypes("page")
+					.setTypes("image")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword))
 					.setQuery(QueryBuilders.matchQuery("ContentSource", keyword)) 
@@ -81,8 +81,8 @@ public class ImagesController {
 				Img img = new Img((String)hit.getSource().get("Keyword"),
 						(String)hit.getSource().get("URLImg"),
 						(String)hit.getSource().get("URLSource"),
-						(String)hit.getSource().get("TitleSource"),
-						(String)hit.getSource().get("ContentSource"),
+						"",
+						"",
 						(String)hit.getSource().get("Category"));
 
 				MetaImg curr = new MetaImg(img,(double)hit.getScore());
