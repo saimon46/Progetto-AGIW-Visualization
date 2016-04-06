@@ -21,10 +21,10 @@
 						<c:forEach var="document" items="#{documentsController.docs}">
 							<table>
 								<tr>
-									<td><font color="blue"><a href="${document.doc.url}">${document.doc.title}</a></font>
-										(Score: <b>${document.score}</b>)</td>
+									<td><font style="font-size: larger;" color="blue"><a href="${document.doc.url}">${document.doc.title}</a></font>
+										<font style="font-size: x-small;">(Score: <b>${document.score}</b>)</font></td>
 								<tr>
-									<td><font color="green">${document.doc.url}</font></td>
+									<td><font color="green">${document.doc.url}</font> - <span class="label label-pill label-info">${document.doc.category}</span></td>
 								</tr>
 								<tr>
 									<td>${document.doc.description}</td>
