@@ -16,7 +16,7 @@
 		<br><br>
 			<div class="form-group">
 				<div class="col-sm-offset-1 col-sm-2">
-					<h:commandButton id="searchImg" styleClass="btn btn-success"
+					<h:commandButton id="searchImg" styleClass="btn btn-info"
 						value="Indietro" action="#{imagesController.removePages}" />
 				</div>
 			</div>

@@ -11,11 +11,11 @@
 		<jsp:include page="header.jsp" />
 		<div align="left">
 			<div class="col-sm-offset-1">
-				<h4>La ricerca delle immagini non ha avuto alcun esito...</h4>
+				<h4>La ricerca dei documenti per categoria non ha avuto alcun esito...</h4>
 			</div>
 		</div>
 	<br><br>
-	<jsp:include page="backImg.jsp" />
+	<jsp:include page="backDocCategorized.jsp" />
 	</f:view>
 </body>
 </html>

@@ -22,16 +22,20 @@ import model.*;
 @SessionScoped
 public class DocumentsController {
 
+	@ManagedProperty(value="#{sessionScope['keyword']}")
 	private String keyword;
+	
 	private final String indexDoc = "indexdoc";
 
 	private int nextPages;
 
 	@ManagedProperty(value="#{docs}")
 	private List<MetaDoc> docs;
-
+	
 	@ManagedProperty(value="#{categorybyKeyword}")
 	private Map<String, Integer> categorybyKeyword;
+	
+	private String macroCategorySelected;
 
 
 	public String addPages() {
@@ -53,6 +57,31 @@ public class DocumentsController {
 			}
 
 			return searchDocs();
+		}
+	}
+	
+	public String addPagesCategorized() {
+		this.nextPages += 10;
+		if(!this.docs.isEmpty()){
+			this.docs.clear();
+		}
+		return searchDocsCategorized();
+
+	}
+	
+	public String removePagesCategorized() {
+		if(this.nextPages == 0){
+			if(!this.docs.isEmpty())
+				this.docs.clear();
+			
+			return searchDocs();
+		}else{
+			this.nextPages -= 10;
+			if(!this.docs.isEmpty()){
+				this.docs.clear();
+			}
+
+			return searchDocsCategorized();
 		}
 	}
 
@@ -147,11 +176,75 @@ public class DocumentsController {
 
 		}
 	}
+	
+	public String searchDocsCategorized_begin() {
+		//THIS SET OR RESET THE FIRST 10 DOCS
+		this.nextPages = 0;
+		if(!this.docs.isEmpty())
+			this.docs.clear();
+		
+		return searchDocsCategorized();
+	}
+	
+	public String searchDocsCategorized() {
+		
+		Node node = nodeBuilder().node();
+		Client client = node.client();
+
+		try{
+			//Select the first token (macro-category)
+			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
+			this.macroCategorySelected = tokenCategory.nextToken();
+			
+			SearchResponse response = client.prepareSearch(indexDoc)
+					.setTypes("page")
+					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+					.setQuery(QueryBuilders.queryString(keyword).field("Keyword"))
+					.setQuery(QueryBuilders.queryString(keyword).field("ContentIndex"))
+					.setQuery(QueryBuilders.queryString(macroCategorySelected).field("Category"))
+					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
+					.execute()
+					.actionGet();
+			
+			
+			for (SearchHit hit : response.getHits()) {
+					Doc doc = new Doc((String)hit.getSource().get("Keyword"),
+							(String)hit.getSource().get("URL"),
+							(String)hit.getSource().get("Title"),
+							(String)hit.getSource().get("Description"),
+							(String)hit.getSource().get("ContentHTML"),
+							(String)hit.getSource().get("ContentIndex"),
+							(String)hit.getSource().get("Category"));
+					MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
+					this.docs.add(curr);
+			}
+
+			node.close();
+
+			if(this.docs.isEmpty())
+				return "errorSearchDocCategorized"; /*Keyword non trovata*/
+			else 
+				return "docsCategorized";
+
+		}catch(Exception e){
+			/*Errore*/
+			return "index";
+		}
+	}
 
 	//Getters and Setters
 
+	
 	public List<MetaDoc> getDocs() {
 		return docs;
+	}
+
+	public String getMacroCategorySelected() {
+		return macroCategorySelected;
+	}
+
+	public void setMacroCategorySelected(String macroCategory) {
+		this.macroCategorySelected = macroCategory;
 	}
 
 	public Map<String, Integer> getCategorybyKeyword() {

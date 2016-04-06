@@ -11,7 +11,7 @@
 		<jsp:include page="header.jsp" />
 		<div align="left">
 			<div class="col-sm-offset-1">
-				<h3>La ricerca dei documenti non ha avuto alcun esito...</h3>
+				<h4>La ricerca dei documenti non ha avuto alcun esito...</h4>
 			</div>
 		</div>
 	<br><br>
