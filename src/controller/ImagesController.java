@@ -8,14 +8,11 @@ import javax.faces.bean.SessionScoped;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
 
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
-
 import model.*;
+import service.ClientProvider;
 
 
 @ManagedBean
@@ -64,15 +61,12 @@ public class ImagesController {
 	
 	public String searchImgs() {
 
-		Node node = nodeBuilder().node();
-		Client client = node.client();
-		
 		try{	
-			SearchResponse response = client.prepareSearch(indexImg)
-					.setTypes("image")
+			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexImg)
+					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.matchQuery("Keyword", keyword))
-					.setQuery(QueryBuilders.matchQuery("ContentSource", keyword)) 
+					.setQuery(QueryBuilders.queryString(keyword).field("Keyword")) // Query
+					.setQuery(QueryBuilders.queryString(keyword).field("ContentSource"))
 					.setFrom(nextPages).setSize(12).setExplain(true)  //10 Imgs
 					.execute()
 					.actionGet();
@@ -88,8 +82,6 @@ public class ImagesController {
 				MetaImg curr = new MetaImg(img,(double)hit.getScore());
 				this.imgs.add(curr);
 			}
-
-			node.close();
 			
 			if(this.imgs.isEmpty())
 				return "errorSearchImg"; /*Keyword non trovata*/

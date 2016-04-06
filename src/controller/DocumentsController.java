@@ -8,14 +8,11 @@ import javax.faces.bean.SessionScoped;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
 
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
-
 import model.*;
+import service.ClientProvider;
 
 
 @ManagedBean
@@ -26,7 +23,7 @@ public class DocumentsController {
 	private String keyword;
 	
 	private final String indexDoc = "indexdoc";
-	private final String indexCatDoc = "indexcatdoc";
+	//private final String indexCatDoc = "indexcatdoc";
 
 	private int nextPages;
 
@@ -101,11 +98,8 @@ public class DocumentsController {
 
 	public String searchDocs() {
 
-		Node node = nodeBuilder().node();
-		Client client = node.client();
-
 		try{
-			SearchResponse response = client.prepareSearch(indexDoc)
+			SearchResponse response = ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.queryString(keyword).field("Keyword")) // Query
@@ -127,8 +121,6 @@ public class DocumentsController {
 				this.docs.add(curr);
 			}
 
-			node.close();
-
 			if(this.docs.isEmpty())
 				return "errorSearchDoc"; /*Keyword non trovata*/
 			else 
@@ -141,13 +133,11 @@ public class DocumentsController {
 	}
 
 	public void searchCategories() {
-		Node node = nodeBuilder().node();
-		Client client = node.client();
-
+	
 		this.categorybyKeyword = new HashMap<String, Integer>();
 
 		try{
-			SearchResponse response = client.prepareSearch(indexCatDoc)
+			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.queryString(keyword).field("Keyword")) // Query
@@ -171,7 +161,6 @@ public class DocumentsController {
 
 			this.categorybyKeyword = sortByValue(this.categorybyKeyword);
 
-			node.close();
 
 		}catch(Exception e){
 
@@ -189,15 +178,12 @@ public class DocumentsController {
 	
 	public String searchDocsCategorized() {
 		
-		Node node = nodeBuilder().node();
-		Client client = node.client();
-
 		try{
 			//Select the first token (macro-category)
 			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
 			this.macroCategorySelected = tokenCategory.nextToken();
 			
-			SearchResponse response = client.prepareSearch(indexDoc)
+			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.queryString(keyword).field("Keyword"))
@@ -219,8 +205,6 @@ public class DocumentsController {
 					MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
 					this.docs.add(curr);
 			}
-
-			node.close();
 
 			if(this.docs.isEmpty())
 				return "errorSearchDocCategorized"; /*Keyword non trovata*/
