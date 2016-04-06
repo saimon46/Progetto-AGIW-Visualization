@@ -31,7 +31,7 @@ public class ImagesController {
 	private List<MetaImg> imgs;
 	
 	public String addPages() {
-		this.nextPages += 10;
+		this.nextPages += 12;
 		if(!this.imgs.isEmpty()){
 			this.imgs.clear();
 		}
@@ -43,7 +43,7 @@ public class ImagesController {
 		if(this.nextPages == 0)
 			return "index";
 		else{
-			this.nextPages -= 10;
+			this.nextPages -= 12;
 			if(!this.imgs.isEmpty()){
 				this.imgs.clear();
 			}
@@ -73,7 +73,7 @@ public class ImagesController {
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.matchQuery("Keyword", keyword))
 					.setQuery(QueryBuilders.matchQuery("ContentSource", keyword)) 
-					.setFrom(nextPages).setSize(10).setExplain(true)  //10 Imgs
+					.setFrom(nextPages).setSize(12).setExplain(true)  //10 Imgs
 					.execute()
 					.actionGet();
 

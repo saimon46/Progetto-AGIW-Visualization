@@ -9,21 +9,48 @@
 
 <body>
 	<f:view>
-	<jsp:include page="header.jsp" />
-	<br><br>
+		<jsp:include page="header.jsp" />
+		<br>
+		<br>
 		<div align="left">
-			<div class="col-sm-offset-1">
-				<c:forEach var="image" items="#{imagesController.imgs}">
-					<table>
-						<tr><td><font color="blue">${image.img.titleSource}</font> (Score: <b>${image.score}</b>)</td></tr>
-						<tr><td><font color="green">${image.img.urlSource}</font></td></tr>
-					</table>
-				<br><br>
-				</c:forEach>
-				
+			<div class="col-sm-offset-1 table-responsive">
+				<table id="ImgsTable" class="table">
+					<tr>
+						<c:forEach var="image" items="#{imagesController.imgs}"
+							varStatus="status">
+							<jsp:useBean id="status"
+								type="javax.servlet.jsp.jstl.core.LoopTagStatus" />
+								<c:if test="<%=status.getCount() < 5%>">
+									<td>
+										<a href="${image.img.urlSource}"><img width="220"
+														src="${image.img.urlImg}"></a>
+									</td>
+								</c:if>
+								<c:if test="<%=status.getCount() >= 5 && status.getCount() < 9%>">
+									<c:if test="<%=status.getCount() == 5%>">
+										<tr>
+									</c:if>
+									<td>
+										<a href="${image.img.urlSource}"><img width="220"
+														src="${image.img.urlImg}"></a>
+									</td>
+								</c:if>
+								<c:if test="<%=status.getCount() >= 9%>">
+									<c:if test="<%=status.getCount() == 9%>">
+										<tr>
+									</c:if>
+									<td>
+										<a href="${image.img.urlSource}"><img width="220"
+														src="${image.img.urlImg}"></a>
+										
+									</td>
+								</c:if>
+						</c:forEach>
+					</tr>
+				</table>
 			</div>
 		</div>
-	<jsp:include page="bottonsImg.jsp" />
-	</f:view>	
+		<jsp:include page="bottonsImg.jsp" />
+	</f:view>
 </body>
 </html>

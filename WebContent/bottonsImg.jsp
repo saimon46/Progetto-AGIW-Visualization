@@ -16,11 +16,11 @@
 		<br><br>
 			<div class="form-group">
 				<div class="col-sm-offset-1 col-sm-2">
-					<h:commandButton id="Imgback" styleClass="btn btn-success"
+					<h:commandButton id="Imgback" styleClass="btn btn-info"
 						value="Indietro" action="#{imagesController.removePages}" />
 				</div>
 				<div class="col-sm-2">
-					<h:commandButton id="Imgnext" styleClass="btn btn-success"
+					<h:commandButton id="Imgnext" styleClass="btn btn-info"
 						value="Avanti" action="#{imagesController.addPages}" />
 				</div>
 			</div>

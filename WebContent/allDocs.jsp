@@ -20,9 +20,8 @@
 					<div class="col-sm-offset-1">
 						<c:forEach var="document" items="#{documentsController.docs}">
 							<table>
-								<!-- <c:if test="${document.doc.title == ''}"><i>Senza Titolo</i></c:if> -->
 								<tr>
-									<td><font color="blue"><a href="html.jsp">${document.doc.title}</a></font>
+									<td><font color="blue"><a href="${document.doc.url}">${document.doc.title}</a></font>
 										(Score: <b>${document.score}</b>)</td>
 								<tr>
 									<td><font color="green">${document.doc.url}</font></td>
@@ -37,7 +36,7 @@
 
 					</div>
 				</td>
-				<td>
+				<td style="vertical-align:top">
 					<div class="col-sm-offset-1">
 						<h4>Macro Categorie associate</h4>
 						<c:forEach var="cat"
