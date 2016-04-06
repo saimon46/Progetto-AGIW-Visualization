@@ -7,17 +7,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
-<title>Documenti trovati</title>
+<title>Documenti categorizzati trovati</title>
 </head>
 
 <body>
 	<f:view>
 		<jsp:include page="header.jsp" />
 		<br>
-		<table>
-			<tr>
-				<td>
-					<div class="col-sm-offset-1">
+		<div class="col-sm-offset-1">
 						<c:forEach var="document" items="#{documentsController.docs}">
 							<table>
 								<tr>
@@ -34,26 +31,8 @@
 							<br>
 						</c:forEach>
 
-					</div>
-				</td>
-				<td style="vertical-align:top">
-					<div class="col-sm-offset-1">
-						<h4>Macro Categorie associate</h4>
-						
-							<c:forEach var="cat"
-							items="#{documentsController.categorybyKeyword}">
-								<h:form>
-									<h:commandLink action="#{documentsController.searchDocsCategorized_begin}" value="#{cat.key} (#{cat.value})">
-										<f:setPropertyActionListener target="#{documentsController.macroCategorySelected}" value="#{cat.key}" />
-									</h:commandLink>
-								</h:form>
-							<br>
-							</c:forEach>
-					</div>
-				</td>
-			</tr>
-		</table>
-		<jsp:include page="bottonsDoc.jsp" />
+		</div>
+		<jsp:include page="bottonsDocCategorized.jsp" />
 	</f:view>
 </body>
 </html>
