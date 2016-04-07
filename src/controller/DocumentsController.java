@@ -179,9 +179,9 @@ public class DocumentsController {
 	public String searchDocsCategorized() {
 		try{
 			//Select the first token (macro-category)
-			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
-			this.macroCategorySelected = tokenCategory.nextToken();
-			
+				StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
+				this.macroCategorySelected = tokenCategory.nextToken();
+				
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
@@ -189,7 +189,7 @@ public class DocumentsController {
 																.field("ContentIndex")
 																.field("Title")
 																.field("Description"))
-					.setQuery(QueryBuilders.queryString(macroCategorySelected).field("Category"))
+					.setQuery(QueryBuilders.matchQuery("Category", macroCategorySelected))
 					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
