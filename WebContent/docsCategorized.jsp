@@ -14,23 +14,33 @@
 	<f:view>
 		<jsp:include page="header.jsp" />
 		<br>
-		<div class="col-sm-offset-1">
-						<c:forEach var="document" items="#{documentsController.docs}">
-							<table>
-								<tr>
-									<td><font style="font-size: larger;" color="blue"><a href="${document.doc.url}">${document.doc.title}</a></font>
-										<font style="font-size: x-small;">(Score: <b>${document.score}</b>)</font></td>
-								<tr>
-									<td><font color="green">${document.doc.url}</font> - <span class="label label-pill label-info">${document.doc.category}</span></td>
-								</tr>
-								<tr>
-									<td>${document.doc.description}</td>
-								</tr>
-							</table>
-							<br>
-							<br>
-						</c:forEach>
-
+		<div class="table-responsive">
+			<table class="table">
+				<tr>
+					<td>
+						<div class="col-md-11">
+							<c:forEach var="document" items="#{documentsController.docs}">
+								<table>
+									<tr>
+										<td><font style="font-size: larger;" color="blue"><a
+												href="${document.doc.url}">${document.doc.title}</a></font> <font
+											style="font-size: x-small;">(Score: <b>${document.score}</b>)
+										</font></td>
+									<tr>
+										<td><font color="green">${document.doc.url}</font> - <span
+											class="label label-pill label-info">${document.doc.category}</span></td>
+									</tr>
+									<tr>
+										<td>${document.doc.description}</td>
+									</tr>
+								</table>
+								<br>
+								<br>
+							</c:forEach>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
 		<jsp:include page="bottonsDocCategorized.jsp" />
 	</f:view>

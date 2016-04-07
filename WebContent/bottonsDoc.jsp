@@ -13,15 +13,16 @@
 <body>
 	<div align="left">
 		<h:form id="bottons" styleClass="form-horizontal">
-		<br><br>
-			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-2">
-					<h:commandButton id="Docback" styleClass="btn btn-info"
-						value="Indietro" action="#{documentsController.removePages}" />
-				</div>
-				<div class="col-sm-2">
-					<h:commandButton id="Docnext" styleClass="btn btn-info"
-						value="Avanti" action="#{documentsController.addPages}" />
+			<div class="col-md-11">
+				<div class="form-group">
+					<div class="col-sm-1">
+						<h:commandButton id="Docback" styleClass="btn btn-info"
+							value="Indietro" action="#{documentsController.removePages}" />
+					</div>
+					<div class="col-sm-2">
+						<h:commandButton id="Docnext" styleClass="btn btn-info"
+							value="Avanti" action="#{documentsController.addPages}" />
+					</div>
 				</div>
 			</div>
 		</h:form>

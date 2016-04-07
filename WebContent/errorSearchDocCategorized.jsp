@@ -7,10 +7,10 @@
 
 <body>
 	<f:view>
-	<br><br>
 		<jsp:include page="header.jsp" />
+		<br>
 		<div align="left">
-			<div class="col-sm-offset-1">
+			<div class="col-md-12">
 				<h4>La ricerca dei documenti per categoria non ha avuto alcun esito...</h4>
 			</div>
 		</div>

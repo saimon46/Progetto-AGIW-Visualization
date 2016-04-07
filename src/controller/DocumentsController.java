@@ -14,7 +14,6 @@ import org.elasticsearch.search.SearchHit;
 import model.*;
 import service.ClientProvider;
 
-
 @ManagedBean
 @SessionScoped
 public class DocumentsController {
@@ -23,7 +22,6 @@ public class DocumentsController {
 	private String keyword;
 	
 	private final String indexDoc = "indexdoc";
-	//private final String indexCatDoc = "indexcatdoc";
 
 	private int nextPages;
 
@@ -97,13 +95,15 @@ public class DocumentsController {
 	}
 
 	public String searchDocs() {
-
 		try{
 			SearchResponse response = ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.queryString(keyword).field("Keyword")) // Query
-					.setQuery(QueryBuilders.queryString(keyword).field("ContentIndex"))
+					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
+																.field("ContentIndex")
+																.field("Title")
+																.field("Description")
+																.field("Category"))
 					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
@@ -133,16 +133,18 @@ public class DocumentsController {
 	}
 
 	public void searchCategories() {
-	
 		this.categorybyKeyword = new HashMap<String, Integer>();
 
 		try{
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.queryString(keyword).field("Keyword")) // Query
-					.setQuery(QueryBuilders.queryString(keyword).field("ContentIndex"))
-					.setSize(100000)
+					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
+																.field("ContentIndex")
+																.field("Title")
+																.field("Description")
+																.field("Category"))
+					.setSize(200000)
 					.execute()
 					.actionGet();
 
@@ -158,9 +160,7 @@ public class DocumentsController {
 				}else
 					this.categorybyKeyword.put(mainCategory, 1);
 			}
-
 			this.categorybyKeyword = sortByValue(this.categorybyKeyword);
-
 
 		}catch(Exception e){
 
@@ -177,7 +177,6 @@ public class DocumentsController {
 	}
 	
 	public String searchDocsCategorized() {
-		
 		try{
 			//Select the first token (macro-category)
 			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
@@ -186,21 +185,22 @@ public class DocumentsController {
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.queryString(keyword).field("Keyword"))
-					.setQuery(QueryBuilders.queryString(keyword).field("ContentIndex"))
+					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
+																.field("ContentIndex")
+																.field("Title")
+																.field("Description"))
 					.setQuery(QueryBuilders.queryString(macroCategorySelected).field("Category"))
 					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
-			
 			
 			for (SearchHit hit : response.getHits()) {
 					Doc doc = new Doc((String)hit.getSource().get("Keyword"),
 							(String)hit.getSource().get("URL"),
 							(String)hit.getSource().get("Title"),
 							(String)hit.getSource().get("Description"),
-							(String)hit.getSource().get("ContentHTML"),
-							(String)hit.getSource().get("ContentIndex"),
+							"",
+							"",
 							(String)hit.getSource().get("Category"));
 					MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
 					this.docs.add(curr);
@@ -219,7 +219,6 @@ public class DocumentsController {
 
 	//Getters and Setters
 
-	
 	public List<MetaDoc> getDocs() {
 		return docs;
 	}

@@ -14,34 +14,34 @@
 <body>
 	<div align="center">
 		<h:form id="keyword" styleClass="form-horizontal">
-			<h:message for="insertKeyword" styleClass="error alert alert-danger" />
-			<div>
-				<h3><center>Chi vuoi cercare?</center></h3>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-4 col-sm-4">
-					<h:inputText styleClass="form-control"
-						value="#{keywordsearch}" required="true"
-						requiredMessage="Il campo e' obbligatorio!" id="keyword"/>
+			<div class="form-group form-group-lg" align="center">
+				<h:message for="insertKeyword" styleClass="error alert alert-danger" />
+				<div class="col-sm-offset-4 col-md-4">
+					<h:inputText styleClass="form-control" value="#{keywordsearch}"
+						required="true" requiredMessage="Il campo e' obbligatorio!"
+						id="keyword" />
 					<h:message for="keyword" style="color:red" />
-					<h:inputHidden value="#{imagesController.keyword}" id="keywordImg" />
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-4 col-sm-2">
-					<h:commandButton id="searchDoc" styleClass="btn btn-success"
-						value="Cerca Documenti" action="#{documentsController.searchDocs_begin}" >
-						<f:setPropertyActionListener target="#{documentsController.keyword}" value="#{keywordsearch}" />
-						<f:setPropertyActionListener target="#{imagesController.keyword}" value="#{keywordsearch}" />
-					</h:commandButton>
-				</div>
-				<div class="col-sm-2">
-					<h:commandButton id="searchImage" styleClass="btn btn-success"
-						value="Cerca Immagini" action="#{imagesController.searchImgs_begin}" >
-						<f:setPropertyActionListener target="#{documentsController.keyword}" value="#{keywordsearch}" />
-						<f:setPropertyActionListener target="#{imagesController.keyword}" value="#{keywordsearch}" />
-					</h:commandButton>
-				</div>
+			<div class="form-group form-group-lg" align="center">
+				<h:commandButton id="searchDoc" styleClass="btn btn-success"
+					value="Cerca Documenti"
+					action="#{documentsController.searchDocs_begin}">
+					<f:setPropertyActionListener
+						target="#{documentsController.keyword}" value="#{keywordsearch}" />
+					<f:setPropertyActionListener target="#{imagesController.keyword}"
+						value="#{keywordsearch}" />
+				</h:commandButton>
+			</div>
+			<div class="form-group form-group-lg" align="center">
+				<h:commandButton id="searchImage" styleClass="btn btn-success"
+					value="Cerca Immagini"
+					action="#{imagesController.searchImgs_begin}">
+					<f:setPropertyActionListener
+						target="#{documentsController.keyword}" value="#{keywordsearch}" />
+					<f:setPropertyActionListener target="#{imagesController.keyword}"
+						value="#{keywordsearch}" />
+				</h:commandButton>
 			</div>
 		</h:form>
 	</div>

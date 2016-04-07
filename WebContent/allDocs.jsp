@@ -14,45 +14,53 @@
 	<f:view>
 		<jsp:include page="header.jsp" />
 		<br>
-		<table>
-			<tr>
-				<td>
-					<div class="col-sm-offset-1">
-						<c:forEach var="document" items="#{documentsController.docs}">
-							<table>
-								<tr>
-									<td><font style="font-size: larger;" color="blue"><a href="${document.doc.url}">${document.doc.title}</a></font>
-										<font style="font-size: x-small;">(Score: <b>${document.score}</b>)</font></td>
-								<tr>
-									<td><font color="green">${document.doc.url}</font> - <span class="label label-pill label-info">${document.doc.category}</span></td>
-								</tr>
-								<tr>
-									<td>${document.doc.description}</td>
-								</tr>
-							</table>
-							<br>
-							<br>
-						</c:forEach>
+		<div class="table-responsive">
+			<table class="table">
+				<tr>
+					<td>
+						<div class="col-md-11">
+							<c:forEach var="document" items="#{documentsController.docs}">
+								<table>
+									<tr>
+										<td><font style="font-size: larger;" color="darkblue"><a
+												href="${document.doc.url}">${document.doc.title}</a></font> <font
+											style="font-size: x-small;">(Score: <b>${document.score}</b>)
+										</font></td>
+									<tr>
+										<td><font color="green">${document.doc.url}</font> - <span
+											class="label label-pill label-info">${document.doc.category}</span></td>
+									</tr>
+									<tr>
+										<td>${document.doc.description}</td>
+									</tr>
+								</table>
+								<br>
+								<br>
+							</c:forEach>
 
-					</div>
-				</td>
-				<td style="vertical-align:top">
-					<div class="col-sm-offset-1">
-						<h4>Macro Categorie associate</h4>
-						
+						</div>
+					</td>
+					<td style="vertical-align: top">
+						<div class="col-sm-offset-2 col-md-8">
+							<h4>Macro Categorie associate</h4>
 							<c:forEach var="cat"
-							items="#{documentsController.categorybyKeyword}">
+								items="#{documentsController.categorybyKeyword}">
 								<h:form>
-									<h:commandLink action="#{documentsController.searchDocsCategorized_begin}" value="#{cat.key} (#{cat.value})">
-										<f:setPropertyActionListener target="#{documentsController.macroCategorySelected}" value="#{cat.key}" />
+									<h:commandLink
+										action="#{documentsController.searchDocsCategorized_begin}"
+										value="#{cat.key} (#{cat.value})">
+										<f:setPropertyActionListener
+											target="#{documentsController.macroCategorySelected}"
+											value="#{cat.key}" />
 									</h:commandLink>
 								</h:form>
-							<br>
+								<br>
 							</c:forEach>
-					</div>
-				</td>
-			</tr>
-		</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<jsp:include page="bottonsDoc.jsp" />
 	</f:view>
 </body>

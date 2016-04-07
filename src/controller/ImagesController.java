@@ -14,7 +14,6 @@ import org.elasticsearch.search.SearchHit;
 import model.*;
 import service.ClientProvider;
 
-
 @ManagedBean
 @SessionScoped
 public class ImagesController {
@@ -60,13 +59,14 @@ public class ImagesController {
 	}
 	
 	public String searchImgs() {
-
 		try{	
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexImg)
-					.setTypes("page")
+					.setTypes("image")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.queryString(keyword).field("Keyword")) // Query
-					.setQuery(QueryBuilders.queryString(keyword).field("ContentSource"))
+					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
+																.field("ContentSource")
+																.field("Category")
+																.field("TitleSource"))
 					.setFrom(nextPages).setSize(12).setExplain(true)  //10 Imgs
 					.execute()
 					.actionGet();

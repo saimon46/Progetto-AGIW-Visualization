@@ -12,12 +12,14 @@
 
 <body>
 	<div align="left">
+	<br><br>
 		<h:form id="bottons" styleClass="form-horizontal">
-		<br><br>
-			<div class="form-group">
-				<div class="col-sm-offset-1 col-sm-2">
-					<h:commandButton id="searchDoc" styleClass="btn btn-info"
-						value="Indietro" action="#{documentsController.removePages}" />
+			<div class="col-md-11">
+				<div class="form-group">
+					<div class="col-sm-2">
+						<h:commandButton id="searchDoc" styleClass="btn btn-info"
+							value="Indietro" action="#{documentsController.removePages}" />
+					</div>
 				</div>
 			</div>
 		</h:form>
