@@ -13,6 +13,9 @@
 <body>
 	<f:view>
 		<jsp:include page="header.jsp" />
+		<div class="col-sm-4">
+			<font style="font-size: x-small;">Tempo di ricerca: <b>${documentsController.timeSearch}</b> s</font>
+		</div>
 		<br>
 		<div class="table-responsive">
 			<table class="table">

@@ -1,5 +1,8 @@
 package controller;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.*;
 
 import javax.faces.bean.ManagedBean;
@@ -25,6 +28,9 @@ public class ImagesController {
 
 	@ManagedProperty(value="#{imgs}")
 	private List<MetaImg> imgs;
+	
+	private BigDecimal timeSearch;
+	private MathContext arr = new MathContext(1, RoundingMode.CEILING); //Rounding to excess
 	
 	public String addPages() {
 		this.nextPages += 12;
@@ -59,6 +65,9 @@ public class ImagesController {
 	}
 	
 	public String searchImgs() {
+		this.timeSearch = null; //Reset Time Search
+		long start = System.nanoTime();
+		
 		try{	
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexImg)
 					.setTypes("image")
@@ -83,6 +92,9 @@ public class ImagesController {
 				this.imgs.add(curr);
 			}
 			
+			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
+			this.timeSearch = end.round(this.arr);
+			
 			if(this.imgs.isEmpty())
 				return "errorSearchImg"; /*Keyword non trovata*/
 			else 
@@ -98,6 +110,14 @@ public class ImagesController {
 
 	public List<MetaImg> getImgs() {
 		return imgs;
+	}
+
+	public BigDecimal getTimeSearch() {
+		return timeSearch;
+	}
+
+	public void setTimeSearch(BigDecimal timeSearch) {
+		this.timeSearch = timeSearch;
 	}
 
 	public String getKeyword() {

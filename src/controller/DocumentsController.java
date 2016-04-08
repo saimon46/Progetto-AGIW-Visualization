@@ -1,5 +1,8 @@
 package controller;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.*;
 
 import javax.faces.bean.ManagedBean;
@@ -32,7 +35,10 @@ public class DocumentsController {
 	private Map<String, Integer> categorybyKeyword;
 	
 	private String macroCategorySelected;
-
+	
+	private BigDecimal categoriesTimeIntermediate;
+	private BigDecimal timeSearch;
+	private MathContext arr = new MathContext(1, RoundingMode.CEILING); //Rounding to excess
 
 	public String addPages() {
 		this.nextPages += 10;
@@ -89,12 +95,15 @@ public class DocumentsController {
 			this.docs.clear();
 		
 		//THIS RUN TOTAL QUERY FOR THE CATEGORIES BY KEYWORD
-		this.searchCategories();
-
+		this.categoriesTimeIntermediate = this.searchCategories();
+		
 		return searchDocs();
 	}
 
 	public String searchDocs() {
+		this.timeSearch = null; //Reset Time Search
+		long start = System.nanoTime();
+		
 		try{
 			SearchResponse response = ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
@@ -120,7 +129,15 @@ public class DocumentsController {
 				MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
 				this.docs.add(curr);
 			}
-
+			
+			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
+			if(this.categoriesTimeIntermediate != null){
+				this.timeSearch = this.categoriesTimeIntermediate.add(end.round(this.arr));
+				this.categoriesTimeIntermediate = null;
+			}
+			else
+				this.timeSearch = end.round(this.arr);
+			
 			if(this.docs.isEmpty())
 				return "errorSearchDoc"; /*Keyword non trovata*/
 			else 
@@ -132,7 +149,10 @@ public class DocumentsController {
 		}
 	}
 
-	public void searchCategories() {
+	public BigDecimal searchCategories() {
+		this.timeSearch = null; //RESET TIMESEARCH
+		long start = System.nanoTime();
+		
 		this.categorybyKeyword = new HashMap<String, Integer>();
 
 		try{
@@ -161,9 +181,14 @@ public class DocumentsController {
 					this.categorybyKeyword.put(mainCategory, 1);
 			}
 			this.categorybyKeyword = sortByValue(this.categorybyKeyword);
-
+			
+			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
+			this.timeSearch = end.round(this.arr);
+			
+			return this.timeSearch;
+			
 		}catch(Exception e){
-
+			return null;
 		}
 	}
 	
@@ -177,6 +202,9 @@ public class DocumentsController {
 	}
 	
 	public String searchDocsCategorized() {
+		this.timeSearch = null;	//RESET TIME SEARCH	
+		long start = System.nanoTime();
+		
 		try{
 			//Select the first token (macro-category)
 				StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
@@ -205,7 +233,10 @@ public class DocumentsController {
 					MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
 					this.docs.add(curr);
 			}
-
+			
+			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
+			this.timeSearch = end.round(this.arr);
+			
 			if(this.docs.isEmpty())
 				return "errorSearchDocCategorized"; /*Keyword non trovata*/
 			else 
@@ -219,8 +250,25 @@ public class DocumentsController {
 
 	//Getters and Setters
 
+	
 	public List<MetaDoc> getDocs() {
 		return docs;
+	}
+
+	public BigDecimal getCategoriesTimeIntermediate() {
+		return categoriesTimeIntermediate;
+	}
+
+	public void setCategoriesTimeIntermediate(BigDecimal categoriesTimeIntermediate) {
+		this.categoriesTimeIntermediate = categoriesTimeIntermediate;
+	}
+
+	public BigDecimal getTimeSearch() {
+		return timeSearch;
+	}
+
+	public void setTimeSearch(BigDecimal timeSearch) {
+		this.timeSearch = timeSearch;
 	}
 
 	public String getMacroCategorySelected() {
