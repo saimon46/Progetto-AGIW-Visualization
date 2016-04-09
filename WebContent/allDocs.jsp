@@ -45,7 +45,7 @@
 					</td>
 					<td style="vertical-align: top">
 						<div class="col-sm-offset-2 col-md-8">
-							<h4>Macro Categorie associate</h4>
+							<h4>Categorie calcolate sulle prime 25 pagine di risultati</h4>
 							<c:forEach var="cat"
 								items="#{documentsController.categorybyKeyword}">
 								<h:form>

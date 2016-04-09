@@ -25,6 +25,7 @@ public class DocumentsController {
 	private String keyword;
 	
 	private final String indexDoc = "indexdoc";
+	private final String indexCatDoc = "indexcatdoc";
 
 	private int nextPages;
 
@@ -156,7 +157,7 @@ public class DocumentsController {
 		this.categorybyKeyword = new HashMap<String, Integer>();
 
 		try{
-			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
+			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexCatDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
@@ -164,7 +165,7 @@ public class DocumentsController {
 																.field("Title")
 																.field("Description")
 																.field("Category"))
-					.setSize(200000)
+					.setSize(250)
 					.execute()
 					.actionGet();
 
@@ -217,7 +218,7 @@ public class DocumentsController {
 																.field("ContentIndex")
 																.field("Title")
 																.field("Description"))
-					.setQuery(QueryBuilders.matchQuery("Category", macroCategorySelected))
+					.setQuery(QueryBuilders.queryString(macroCategorySelected).field("Category"))
 					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
