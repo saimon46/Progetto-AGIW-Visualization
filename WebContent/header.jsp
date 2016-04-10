@@ -16,7 +16,7 @@
 			<div class="col-md-12">
 				<div class="col-md-12">
 					<div class="col-md-5">
-						<img height="25" src="logo.png" class="img-responsive">
+						<a href=index.html><img height="25" src="logo.png" class="img-responsive"></a>
 					</div>
 				</div>
 				<br>
