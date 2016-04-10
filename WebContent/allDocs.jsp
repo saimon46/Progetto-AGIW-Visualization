@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head>
-<title>Documenti trovati</title>
+<title>LabelSearch - Documenti trovati</title>
 </head>
 
 <body>
@@ -21,6 +21,7 @@
 			<table class="table">
 				<tr>
 					<td>
+					<br>
 						<div class="col-md-11">
 							<c:forEach var="document" items="#{documentsController.docs}">
 								<table>
@@ -45,7 +46,7 @@
 					</td>
 					<td style="vertical-align: top">
 						<div class="col-sm-offset-2 col-md-8">
-							<h4>Categorie calcolate sulle prime 25 pagine di risultati</h4>
+							<h4>Sommario <b><i>Labels</i></b> su 25 pagine</h4>
 							<c:forEach var="cat"
 								items="#{documentsController.categorybyKeyword}">
 								<h:form>

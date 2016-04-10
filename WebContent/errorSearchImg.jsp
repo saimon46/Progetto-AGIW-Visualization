@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Ricerca fallita</title>
+<title>LabelSearch - Ricerca fallita</title>
 </head>
 
 <body>

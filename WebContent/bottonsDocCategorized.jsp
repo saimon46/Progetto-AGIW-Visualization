@@ -15,15 +15,17 @@
 		<h:form id="bottons" styleClass="form-horizontal">
 			<div class="col-md-11">
 				<div class="form-group">
-					<div class="col-sm-1">
-						<h:commandButton id="Docback" styleClass="btn btn-info"
-							value="Indietro"
-							action="#{documentsController.removePagesCategorized}" />
-					</div>
 					<div class="col-sm-2">
 						<h:commandButton id="Docnext" styleClass="btn btn-info"
 							value="Avanti"
 							action="#{documentsController.addPagesCategorized}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1">
+						<h:commandButton id="Docback" styleClass="btn btn-info"
+							value="Indietro"
+							action="#{documentsController.removePagesCategorized}" />
 					</div>
 				</div>
 			</div>

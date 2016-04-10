@@ -11,15 +11,18 @@
 </head>
 
 <body>
-	<br>
 	<div align="left" class="col-sm-offset-1">
 		<h:form id="keyword" styleClass="form-horizontal">
-			<br>
-			<br>
 			<div class="col-md-12">
+				<div class="col-md-12">
+					<div class="col-md-5">
+						<img height="25" src="logo.png" class="img-responsive">
+					</div>
+				</div>
+				<br>
 				<h:message for="insertKeyword" styleClass="error alert alert-danger" />
 				<div class="form-group">
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<h:inputText styleClass="form-control" value="#{keywordsearch}"
 							required="true" requiredMessage="Il campo e' obbligatorio!"
 							id="keyword" />
@@ -37,6 +40,8 @@
 								value="#{keywordsearch}" />
 						</h:commandButton>
 					</div>
+				</div>
+				<div class="form-group">
 					<div class="col-sm-2">
 						<h:commandButton id="searchImage" styleClass="btn btn-success"
 							value="Cerca Immagini"

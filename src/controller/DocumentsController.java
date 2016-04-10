@@ -127,7 +127,7 @@ public class DocumentsController {
 						"",
 						(String)hit.getSource().get("Category"));
 
-				MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
+				MetaDoc curr = new MetaDoc(doc,(double)Math.floor(hit.getScore() * 10000.0) / 10000.0);
 				this.docs.add(curr);
 			}
 			
@@ -231,7 +231,7 @@ public class DocumentsController {
 							"",
 							"",
 							(String)hit.getSource().get("Category"));
-					MetaDoc curr = new MetaDoc(doc,(double)hit.getScore());
+					MetaDoc curr = new MetaDoc(doc,(double)Math.floor(hit.getScore() * 10000.0) / 10000.0);
 					this.docs.add(curr);
 			}
 			

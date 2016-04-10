@@ -15,13 +15,15 @@
 		<h:form id="bottons" styleClass="form-horizontal">
 			<div class="col-md-11">
 				<div class="form-group">
-					<div class="col-sm-1">
-						<h:commandButton id="Imgback" styleClass="btn btn-info"
-							value="Indietro" action="#{imagesController.removePages}" />
-					</div>
 					<div class="col-sm-2">
 						<h:commandButton id="Imgnext" styleClass="btn btn-info"
 							value="Avanti" action="#{imagesController.addPages}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-1">
+						<h:commandButton id="Imgback" styleClass="btn btn-info"
+							value="Indietro" action="#{imagesController.removePages}" />
 					</div>
 				</div>
 			</div>
