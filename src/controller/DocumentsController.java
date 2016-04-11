@@ -219,13 +219,13 @@ public class DocumentsController {
 			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
 			this.macroCategorySelected = tokenCategory.nextToken();
 			
-			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
+			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexCatDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
 														.should(QueryBuilders.matchQuery("Title", keyword))
 														.should(QueryBuilders.matchQuery("Description", keyword))
-														.should(QueryBuilders.matchQuery("Category", macroCategorySelected)))
+														.must(QueryBuilders.matchQuery("Category", macroCategorySelected)))
 					.setFrom(nextPagesCategorized).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
