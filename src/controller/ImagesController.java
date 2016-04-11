@@ -76,9 +76,9 @@ public class ImagesController {
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexImg)
 					.setTypes("image")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ContentSource", keyword))
-							.must(QueryBuilders.matchQuery("Keyword", keyword))
-							.must(QueryBuilders.matchQuery("TitleSource", keyword))
+					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentSource", keyword))
+							.should(QueryBuilders.matchQuery("Keyword", keyword))
+							.should(QueryBuilders.matchQuery("TitleSource", keyword))
 							.should(QueryBuilders.matchQuery("Category", keyword)))
 					.setFrom(nextPages).setSize(12).setExplain(true)  //10 Imgs
 					.execute()
