@@ -118,11 +118,10 @@ public class DocumentsController {
 			SearchResponse response = ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
-							.field("ContentIndex")
-							.field("Title")
-							.field("Description")
-							.field("Category"))
+					.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ContentIndex", keyword))
+														.must(QueryBuilders.matchQuery("Title", keyword))
+														.must(QueryBuilders.matchQuery("Description", keyword))
+														.should(QueryBuilders.matchQuery("Category", keyword)))
 					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
@@ -169,11 +168,10 @@ public class DocumentsController {
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexCatDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
-							.field("ContentIndex")
-							.field("Title")
-							.field("Description")
-							.field("Category"))
+					.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ContentIndex", keyword))
+														.must(QueryBuilders.matchQuery("Title", keyword))
+														.must(QueryBuilders.matchQuery("Description", keyword))
+														.should(QueryBuilders.matchQuery("Category", keyword)))
 					.setSize(250)
 					.execute()
 					.actionGet();
@@ -220,18 +218,14 @@ public class DocumentsController {
 			//Select the first token (macro-category)
 			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
 			this.macroCategorySelected = tokenCategory.nextToken();
-
-			BoolQueryBuilder boolQuery = new BoolQueryBuilder();
-			boolQuery.must(QueryBuilders.queryString(keyword).field("Keyword"));
-			boolQuery.must(QueryBuilders.queryString(keyword).field("ContentIndex"));
-			boolQuery.must(QueryBuilders.queryString(keyword).field("Title"));
-			boolQuery.must(QueryBuilders.queryString(keyword).field("Description"));
-			boolQuery.must(QueryBuilders.queryString(macroCategorySelected).field("Category"));
 			
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(boolQuery)
+					.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ContentIndex", keyword))
+														.must(QueryBuilders.matchQuery("Title", keyword))
+														.must(QueryBuilders.matchQuery("Description", keyword))
+														.must(QueryBuilders.matchQuery("Category", macroCategorySelected)))
 					.setFrom(nextPagesCategorized).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();

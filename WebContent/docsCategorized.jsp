@@ -26,6 +26,7 @@
 			<table class="table">
 				<tr>
 					<td>
+					<br>
 						<div class="col-md-11">
 							<c:forEach var="document" items="#{documentsController.docs}">
 								<table>
