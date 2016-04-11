@@ -25,6 +25,7 @@ public class ImagesController {
 	private final String indexImg = "indeximg";
 	
 	private int nextPages;
+	private int numberPage;
 
 	@ManagedProperty(value="#{imgs}")
 	private List<MetaImg> imgs;
@@ -34,6 +35,7 @@ public class ImagesController {
 	
 	public String addPages() {
 		this.nextPages += 12;
+		this.numberPage++;
 		if(!this.imgs.isEmpty()){
 			this.imgs.clear();
 		}
@@ -46,6 +48,7 @@ public class ImagesController {
 			return "index";
 		else{
 			this.nextPages -= 12;
+			this.numberPage--;
 			if(!this.imgs.isEmpty()){
 				this.imgs.clear();
 			}
@@ -57,6 +60,7 @@ public class ImagesController {
 	public String searchImgs_begin() {
 		//THIS SET OR RESET THE FIRST 10 IMGS
 		this.nextPages = 0;
+		this.numberPage = 1;
 		this.imgs = new ArrayList<MetaImg>();
 		if(!this.imgs.isEmpty())
 			this.imgs.clear();
@@ -139,4 +143,13 @@ public class ImagesController {
 	public void setNextPages(int nextPages) {
 		this.nextPages = nextPages;
 	}
+
+	public int getNumberPage() {
+		return numberPage;
+	}
+
+	public void setNumberPage(int numberPage) {
+		this.numberPage = numberPage;
+	}
+	
 }

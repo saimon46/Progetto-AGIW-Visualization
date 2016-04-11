@@ -29,6 +29,9 @@ public class DocumentsController {
 	private final String indexCatDoc = "indexcatdoc";
 
 	private int nextPages;
+	private int nextPagesCategorized;
+	private int numberPage;
+	private int numberPageCategorized;
 
 	@ManagedProperty(value="#{docs}")
 	private List<MetaDoc> docs;
@@ -44,6 +47,7 @@ public class DocumentsController {
 
 	public String addPages() {
 		this.nextPages += 10;
+		this.numberPage++;
 		if(!this.docs.isEmpty()){
 			this.docs.clear();
 		}
@@ -56,6 +60,7 @@ public class DocumentsController {
 			return "index";
 		else{
 			this.nextPages -= 10;
+			this.numberPage--;
 			if(!this.docs.isEmpty()){
 				this.docs.clear();
 			}
@@ -65,7 +70,8 @@ public class DocumentsController {
 	}
 
 	public String addPagesCategorized() {
-		this.nextPages += 10;
+		this.nextPagesCategorized += 10;
+		this.numberPageCategorized++;
 		if(!this.docs.isEmpty()){
 			this.docs.clear();
 		}
@@ -74,13 +80,14 @@ public class DocumentsController {
 	}
 
 	public String removePagesCategorized() {
-		if(this.nextPages == 0){
+		if(this.nextPagesCategorized == 0){
 			if(!this.docs.isEmpty())
 				this.docs.clear();
 
 			return searchDocs();
 		}else{
-			this.nextPages -= 10;
+			this.nextPagesCategorized -= 10;
+			this.numberPageCategorized--;
 			if(!this.docs.isEmpty()){
 				this.docs.clear();
 			}
@@ -92,6 +99,7 @@ public class DocumentsController {
 	public String searchDocs_begin() {
 		//THIS SET OR RESET THE FIRST 10 DOCS
 		this.nextPages = 0;
+		this.numberPage = 1;
 		this.docs = new ArrayList<MetaDoc>();
 		if(!this.docs.isEmpty())
 			this.docs.clear();
@@ -196,7 +204,8 @@ public class DocumentsController {
 
 	public String searchDocsCategorized_begin() {
 		//THIS SET OR RESET THE FIRST 10 DOCS
-		this.nextPages = 0;
+		this.nextPagesCategorized = 0;
+		this.numberPageCategorized = 1;
 		if(!this.docs.isEmpty())
 			this.docs.clear();
 
@@ -223,7 +232,7 @@ public class DocumentsController {
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(boolQuery)
-					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
+					.setFrom(nextPagesCategorized).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
 
@@ -254,7 +263,6 @@ public class DocumentsController {
 	}
 
 	//Getters and Setters
-
 
 	public List<MetaDoc> getDocs() {
 		return docs;
@@ -310,6 +318,30 @@ public class DocumentsController {
 
 	public void setNextPages(int nextPages) {
 		this.nextPages = nextPages;
+	}
+	
+	public int getNumberPage() {
+		return numberPage;
+	}
+
+	public void setNumberPage(int numberPage) {
+		this.numberPage = numberPage;
+	}
+	
+	public int getNumberPageCategorized() {
+		return numberPageCategorized;
+	}
+
+	public void setNumberPageCategorized(int numberPageCategorized) {
+		this.numberPageCategorized = numberPageCategorized;
+	}
+	
+	public int getNextPagesCategorized() {
+		return nextPagesCategorized;
+	}
+
+	public void setNextPagesCategorized(int nextPagesCategorized) {
+		this.nextPagesCategorized = nextPagesCategorized;
 	}
 
 	public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue( Map<K, V> map ) {

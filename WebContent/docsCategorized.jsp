@@ -13,8 +13,13 @@
 <body>
 	<f:view>
 		<jsp:include page="header.jsp" />
-		<div class="col-sm-4">
-			<font style="font-size: x-small;">Tempo di ricerca: <b>${documentsController.timeSearch}</b> s</font>
+		<div>
+			<div class="text-left col-sm-4">
+				<font style="font-size: x-small;">Tempo di ricerca: <b>${documentsController.timeSearch}</b> s</font>
+			</div>
+			<div class="text-right col-sm-4">
+				<font style="font-size: x-small;">Pagina: <b>${documentsController.numberPageCategorized}</b></font>
+			</div>
 		</div>
 		<br>
 		<div class="table-responsive">
