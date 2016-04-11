@@ -11,6 +11,7 @@ import javax.faces.bean.SessionScoped;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 
@@ -23,7 +24,7 @@ public class DocumentsController {
 
 	@ManagedProperty(value="#{sessionScope['keyword']}")
 	private String keyword;
-	
+
 	private final String indexDoc = "indexdoc";
 	private final String indexCatDoc = "indexcatdoc";
 
@@ -31,12 +32,12 @@ public class DocumentsController {
 
 	@ManagedProperty(value="#{docs}")
 	private List<MetaDoc> docs;
-	
+
 	@ManagedProperty(value="#{categorybyKeyword}")
 	private Map<String, Integer> categorybyKeyword;
-	
+
 	private String macroCategorySelected;
-	
+
 	private BigDecimal categoriesTimeIntermediate;
 	private BigDecimal timeSearch;
 	private MathContext arr = new MathContext(1, RoundingMode.CEILING); //Rounding to excess
@@ -62,7 +63,7 @@ public class DocumentsController {
 			return searchDocs();
 		}
 	}
-	
+
 	public String addPagesCategorized() {
 		this.nextPages += 10;
 		if(!this.docs.isEmpty()){
@@ -71,12 +72,12 @@ public class DocumentsController {
 		return searchDocsCategorized();
 
 	}
-	
+
 	public String removePagesCategorized() {
 		if(this.nextPages == 0){
 			if(!this.docs.isEmpty())
 				this.docs.clear();
-			
+
 			return searchDocs();
 		}else{
 			this.nextPages -= 10;
@@ -94,32 +95,32 @@ public class DocumentsController {
 		this.docs = new ArrayList<MetaDoc>();
 		if(!this.docs.isEmpty())
 			this.docs.clear();
-		
+
 		//THIS RUN TOTAL QUERY FOR THE CATEGORIES BY KEYWORD
 		this.categoriesTimeIntermediate = this.searchCategories();
-		
+
 		return searchDocs();
 	}
 
 	public String searchDocs() {
 		this.timeSearch = null; //Reset Time Search
 		long start = System.nanoTime();
-		
+
 		try{
 			SearchResponse response = ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
-																.field("ContentIndex")
-																.field("Title")
-																.field("Description")
-																.field("Category"))
+							.field("ContentIndex")
+							.field("Title")
+							.field("Description")
+							.field("Category"))
 					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
 
 			for (SearchHit hit : response.getHits()) {
-						Doc doc = new Doc((String)hit.getSource().get("Keyword"),
+				Doc doc = new Doc((String)hit.getSource().get("Keyword"),
 						(String)hit.getSource().get("URL"),
 						(String)hit.getSource().get("Title"),
 						(String)hit.getSource().get("Description"),
@@ -130,7 +131,7 @@ public class DocumentsController {
 				MetaDoc curr = new MetaDoc(doc,(double)Math.floor(hit.getScore() * 10000.0) / 10000.0);
 				this.docs.add(curr);
 			}
-			
+
 			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
 			if(this.categoriesTimeIntermediate != null){
 				this.timeSearch = this.categoriesTimeIntermediate.add(end.round(this.arr));
@@ -138,7 +139,7 @@ public class DocumentsController {
 			}
 			else
 				this.timeSearch = end.round(this.arr);
-			
+
 			if(this.docs.isEmpty())
 				return "errorSearchDoc"; /*Keyword non trovata*/
 			else 
@@ -153,7 +154,7 @@ public class DocumentsController {
 	public BigDecimal searchCategories() {
 		this.timeSearch = null; //RESET TIMESEARCH
 		long start = System.nanoTime();
-		
+
 		this.categorybyKeyword = new HashMap<String, Integer>();
 
 		try{
@@ -161,10 +162,10 @@ public class DocumentsController {
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
-																.field("ContentIndex")
-																.field("Title")
-																.field("Description")
-																.field("Category"))
+							.field("ContentIndex")
+							.field("Title")
+							.field("Description")
+							.field("Category"))
 					.setSize(250)
 					.execute()
 					.actionGet();
@@ -182,62 +183,65 @@ public class DocumentsController {
 					this.categorybyKeyword.put(mainCategory, 1);
 			}
 			this.categorybyKeyword = sortByValue(this.categorybyKeyword);
-			
+
 			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
 			this.timeSearch = end.round(this.arr);
-			
+
 			return this.timeSearch;
-			
+
 		}catch(Exception e){
 			return null;
 		}
 	}
-	
+
 	public String searchDocsCategorized_begin() {
 		//THIS SET OR RESET THE FIRST 10 DOCS
 		this.nextPages = 0;
 		if(!this.docs.isEmpty())
 			this.docs.clear();
-		
+
 		return searchDocsCategorized();
 	}
-	
+
 	public String searchDocsCategorized() {
 		this.timeSearch = null;	//RESET TIME SEARCH	
 		long start = System.nanoTime();
-		
+
 		try{
 			//Select the first token (macro-category)
-				StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
-				this.macroCategorySelected = tokenCategory.nextToken();
-				
+			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
+			this.macroCategorySelected = tokenCategory.nextToken();
+
+			BoolQueryBuilder boolQuery = new BoolQueryBuilder();
+			boolQuery.must(QueryBuilders.queryString(keyword).field("Keyword"));
+			boolQuery.must(QueryBuilders.queryString(keyword).field("ContentIndex"));
+			boolQuery.must(QueryBuilders.queryString(keyword).field("Title"));
+			boolQuery.must(QueryBuilders.queryString(keyword).field("Description"));
+			boolQuery.must(QueryBuilders.queryString(macroCategorySelected).field("Category"));
+			
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.queryString(keyword).field("Keyword") // Query
-																.field("ContentIndex")
-																.field("Title")
-																.field("Description"))
-					.setQuery(QueryBuilders.queryString(macroCategorySelected).field("Category"))
+					.setQuery(boolQuery)
 					.setFrom(nextPages).setSize(10).setExplain(true) //10 docs
 					.execute()
 					.actionGet();
-			
+
 			for (SearchHit hit : response.getHits()) {
-					Doc doc = new Doc((String)hit.getSource().get("Keyword"),
-							(String)hit.getSource().get("URL"),
-							(String)hit.getSource().get("Title"),
-							(String)hit.getSource().get("Description"),
-							"",
-							"",
-							(String)hit.getSource().get("Category"));
-					MetaDoc curr = new MetaDoc(doc,(double)Math.floor(hit.getScore() * 10000.0) / 10000.0);
-					this.docs.add(curr);
+				Doc doc = new Doc((String)hit.getSource().get("Keyword"),
+						(String)hit.getSource().get("URL"),
+						(String)hit.getSource().get("Title"),
+						(String)hit.getSource().get("Description"),
+						"",
+						"",
+						(String)hit.getSource().get("Category"));
+				MetaDoc curr = new MetaDoc(doc,(double)Math.floor(hit.getScore() * 10000.0) / 10000.0);
+				this.docs.add(curr);
 			}
-			
+
 			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
 			this.timeSearch = end.round(this.arr);
-			
+
 			if(this.docs.isEmpty())
 				return "errorSearchDocCategorized"; /*Keyword non trovata*/
 			else 
@@ -251,7 +255,7 @@ public class DocumentsController {
 
 	//Getters and Setters
 
-	
+
 	public List<MetaDoc> getDocs() {
 		return docs;
 	}
@@ -307,7 +311,7 @@ public class DocumentsController {
 	public void setNextPages(int nextPages) {
 		this.nextPages = nextPages;
 	}
-	
+
 	public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue( Map<K, V> map ) {
 		List<Map.Entry<K, V>> list =
 				new LinkedList<>( map.entrySet() );
