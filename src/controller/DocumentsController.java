@@ -11,7 +11,6 @@ import javax.faces.bean.SessionScoped;
 
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 
@@ -165,7 +164,7 @@ public class DocumentsController {
 		this.categorybyKeyword = new HashMap<String, Integer>();
 
 		try{
-			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexCatDoc)
+			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
