@@ -36,8 +36,9 @@
 											style="font-size: x-small;">(Score: <b>${document.score}</b>)
 										</font></td>
 									<tr>
-										<td><font color="green">${document.doc.url}</font> - <span
-											class="label label-pill label-info">${document.doc.category}</span></td>
+										<td><font color="green">${document.doc.url}</font><c:if test="${document.doc.category != 'Senza categoria'}"> - <span
+											class="label label-pill label-info">${document.doc.category}</span></c:if>
+											</td>
 									</tr>
 									<tr>
 										<td>${document.doc.description}</td>
