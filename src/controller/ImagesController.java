@@ -78,8 +78,7 @@ public class ImagesController {
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
 					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentSource", keyword))
 							.should(QueryBuilders.matchQuery("Keyword", keyword))
-							.should(QueryBuilders.matchQuery("TitleSource", keyword))
-							.should(QueryBuilders.matchQuery("Category", keyword)))
+							.should(QueryBuilders.matchQuery("TitleSource", keyword)))
 					.setFrom(nextPages).setSize(12).setExplain(true)  //10 Imgs
 					.execute()
 					.actionGet();
@@ -89,8 +88,7 @@ public class ImagesController {
 						(String)hit.getSource().get("URLImg"),
 						(String)hit.getSource().get("URLSource"),
 						"",
-						"",
-						(String)hit.getSource().get("Category"));
+						"");
 
 				MetaImg curr = new MetaImg(img,(double)hit.getScore());
 				this.imgs.add(curr);
@@ -151,5 +149,4 @@ public class ImagesController {
 	public void setNumberPage(int numberPage) {
 		this.numberPage = numberPage;
 	}
-	
 }
