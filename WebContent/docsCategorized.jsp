@@ -17,6 +17,9 @@
 			<div class="text-left col-sm-4">
 				<font style="font-size: x-small;">Tempo di ricerca: <b>${documentsController.timeSearch}</b> s</font>
 			</div>
+			<div class="text-center col-sm-4">
+				<font style="font-size: x-small;">Documenti categorizzati Trovati: <b>${documentsController.countDocsCategorized}</b></font>
+			</div>
 			<div class="text-right col-sm-4">
 				<font style="font-size: x-small;">Pagina: <b>${documentsController.numberPageCategorized}</b></font>
 			</div>

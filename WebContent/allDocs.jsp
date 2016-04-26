@@ -17,6 +17,9 @@
 			<div class="text-left col-sm-4">
 				<font style="font-size: x-small;">Tempo di ricerca: <b>${documentsController.timeSearch}</b> s</font>
 			</div>
+			<div class="text-center col-sm-4">
+				<font style="font-size: x-small;">Documenti Trovati: <b>${documentsController.countDocs}</b></font>
+			</div>
 			<div class="text-right col-sm-4">
 				<font style="font-size: x-small;">Pagina: <b>${documentsController.numberPage}</b></font>
 			</div>

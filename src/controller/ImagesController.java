@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -27,6 +28,8 @@ public class ImagesController {
 	private int nextPages;
 	private int numberPage;
 
+	private int countImgs;
+	
 	@ManagedProperty(value="#{imgs}")
 	private List<MetaImg> imgs;
 	
@@ -65,9 +68,28 @@ public class ImagesController {
 		if(!this.imgs.isEmpty())
 			this.imgs.clear();
 		
+		//THIS COUNTS THE RESULTS
+		this.countImgs = this.countImgs();
+		
 		return searchImgs();
 	}
 	
+	private int countImgs() {
+		try{
+			CountResponse response = ClientProvider.instance().getClient().prepareCount(indexImg)
+					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentSource", keyword))
+							.should(QueryBuilders.matchQuery("Keyword", keyword))
+							.should(QueryBuilders.matchQuery("TitleSource", keyword)))
+					.execute()
+					.actionGet();
+			
+			return (int) response.getCount();
+			
+		}catch(Exception e){
+			return 0;
+		}
+	}
+
 	public String searchImgs() {
 		this.timeSearch = null; //Reset Time Search
 		long start = System.nanoTime();
@@ -120,6 +142,14 @@ public class ImagesController {
 
 	public void setTimeSearch(BigDecimal timeSearch) {
 		this.timeSearch = timeSearch;
+	}
+
+	public int getCountImgs() {
+		return countImgs;
+	}
+
+	public void setCountImgs(int countImgs) {
+		this.countImgs = countImgs;
 	}
 
 	public String getKeyword() {

@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -31,6 +32,9 @@ public class DocumentsController {
 	private int nextPagesCategorized;
 	private int numberPage;
 	private int numberPageCategorized;
+	
+	private int countDocs;
+	private int countDocsCategorized;
 
 	@ManagedProperty(value="#{docs}")
 	private List<MetaDoc> docs;
@@ -105,8 +109,28 @@ public class DocumentsController {
 
 		//THIS RUN TOTAL QUERY FOR THE CATEGORIES BY KEYWORD
 		this.categoriesTimeIntermediate = this.searchCategories();
+		
+		//THIS COUNTS THE RESULTS
+		this.countDocs = this.countDocs();
 
 		return searchDocs();
+	}
+
+	private int countDocs() {
+		try{
+			CountResponse response = ClientProvider.instance().getClient().prepareCount(indexDoc)
+					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
+					.should(QueryBuilders.matchQuery("Title", keyword))
+					.should(QueryBuilders.matchQuery("Description", keyword))
+					.should(QueryBuilders.matchQuery("Category", keyword)))
+					.execute()
+					.actionGet();
+			
+			return (int) response.getCount();
+			
+		}catch(Exception e){
+			return 0;
+		}
 	}
 
 	public String searchDocs() {
@@ -205,8 +229,32 @@ public class DocumentsController {
 		this.numberPageCategorized = 1;
 		if(!this.docs.isEmpty())
 			this.docs.clear();
+		
+		//THIS COUNTS THE RESULTS
+		this.countDocsCategorized = this.countDocsCategorized();
 
 		return searchDocsCategorized();
+	}
+
+	private int countDocsCategorized() {
+		try{
+			//Select the first token (macro-category)
+			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
+			this.macroCategorySelected = tokenCategory.nextToken();
+			
+			CountResponse response = ClientProvider.instance().getClient().prepareCount(indexCatDoc)
+					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
+							.should(QueryBuilders.matchQuery("Title", keyword))
+							.should(QueryBuilders.matchQuery("Description", keyword))
+							.must(QueryBuilders.matchQuery("Category", macroCategorySelected)))
+					.execute()
+					.actionGet();
+			
+			return (int) response.getCount();
+			
+		}catch(Exception e){
+			return 0;
+		}
 	}
 
 	public String searchDocsCategorized() {
@@ -257,8 +305,17 @@ public class DocumentsController {
 
 	//Getters and Setters
 
+	
 	public List<MetaDoc> getDocs() {
 		return docs;
+	}
+
+	public int getCountDocs() {
+		return countDocs;
+	}
+
+	public void setCountDocs(int countDocs) {
+		this.countDocs = countDocs;
 	}
 
 	public BigDecimal getCategoriesTimeIntermediate() {
@@ -299,6 +356,14 @@ public class DocumentsController {
 
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+
+	public int getCountDocsCategorized() {
+		return countDocsCategorized;
+	}
+
+	public void setCountDocsCategorized(int countDocsCategorized) {
+		this.countDocsCategorized = countDocsCategorized;
 	}
 
 	public void setDocs(List<MetaDoc> docs) {

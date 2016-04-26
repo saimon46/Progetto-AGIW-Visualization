@@ -14,6 +14,9 @@
 			<div class="text-left col-sm-4">
 				<font style="font-size: x-small;">Tempo di ricerca: <b>${imagesController.timeSearch}</b> s</font>
 			</div>
+			<div class="text-center col-sm-4">
+				<font style="font-size: x-small;">Immagini Trovate: <b>${imagesController.countImgs}</b></font>
+			</div>
 			<div class="text-right col-sm-4">
 				<font style="font-size: x-small;">Pagina: <b>${imagesController.numberPage}</b></font>
 			</div>
