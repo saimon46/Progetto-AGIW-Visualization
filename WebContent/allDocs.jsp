@@ -55,7 +55,7 @@
 					</td>
 					<td style="vertical-align: top">
 						<div class="col-sm-offset-2 col-md-8">
-							<h4>Sommario <b><i>Labels</i></b> su 25 pagine</h4>
+							<h4>Sommario <b><i>Labels</i></b></h4>
 							<c:forEach var="cat"
 								items="#{documentsController.categorybyKeyword}">
 								<h:form>

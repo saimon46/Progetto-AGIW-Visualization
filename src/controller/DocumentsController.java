@@ -126,6 +126,7 @@ public class DocumentsController {
 					.execute()
 					.actionGet();
 			
+			
 			return (int) response.getCount();
 			
 		}catch(Exception e){
@@ -184,39 +185,36 @@ public class DocumentsController {
 	public BigDecimal searchCategories() {
 		this.timeSearch = null; //RESET TIMESEARCH
 		long start = System.nanoTime();
-
-		this.categorybyKeyword = new HashMap<String, Integer>();
-
+		
 		try{
-			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexDoc)
-					.setTypes("page")
-					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+			
+		this.categorybyKeyword = new HashMap<String, Integer>();
+		Set<String> listCategories = new HashSet<String>(Arrays.asList("Senza categoria", "Arte, cultura, intrattenimento", 
+				"Giustizia, Criminalità", "Disastri, Incidenti", "Economia, affari e finanza", "Istruzione", "Ambiente", "Salute", 
+				"Storie, Curiosità", "Lavoro", "Tempo libero", "Politica", "Religioni, Fedi", "Scienza, Tecnologia", 
+				"Sociale", "Sport", "Agitazioni, Conflitti, Guerre", "Meteo"));
+			
+		for(String category: listCategories){
+			
+			CountResponse response = ClientProvider.instance().getClient().prepareCount(indexCatDoc)
 					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
-														.should(QueryBuilders.matchQuery("Title", keyword))
-														.should(QueryBuilders.matchQuery("Description", keyword))
-														.should(QueryBuilders.matchQuery("Category", keyword)))
-					.setSize(250)
+							.should(QueryBuilders.matchQuery("Title", keyword))
+							.should(QueryBuilders.matchQuery("Description", keyword))
+							.must(QueryBuilders.matchQuery("Category", category)))
 					.execute()
 					.actionGet();
-
-			for (SearchHit hit : response.getHits()) {
-				String category = (String) hit.getSource().get("Category");
-
-				StringTokenizer tokenCategory = new StringTokenizer(category, "-");
-				String mainCategory = tokenCategory.nextToken();
-
-				if (this.categorybyKeyword.containsKey(mainCategory)){
-					Integer value = this.categorybyKeyword.get(mainCategory) + 1;
-					this.categorybyKeyword.replace(mainCategory, value);
-				}else
-					this.categorybyKeyword.put(mainCategory, 1);
-			}
+			
+			if((int) response.getCount() > 0)
+				this.categorybyKeyword.put(category, (int) response.getCount());
+		}
+		
+		if(!this.categorybyKeyword.isEmpty())
 			this.categorybyKeyword = sortByValue(this.categorybyKeyword);
+			
+		BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
+		this.timeSearch = end.round(this.arr);
 
-			BigDecimal end = new BigDecimal((System.nanoTime() - start)/ 1000000000.0);
-			this.timeSearch = end.round(this.arr);
-
-			return this.timeSearch;
+		return this.timeSearch;
 
 		}catch(Exception e){
 			return null;
@@ -242,15 +240,8 @@ public class DocumentsController {
 			StringTokenizer tokenCategory = new StringTokenizer(this.macroCategorySelected, "-");
 			this.macroCategorySelected = tokenCategory.nextToken();
 			
-			CountResponse response = ClientProvider.instance().getClient().prepareCount(indexCatDoc)
-					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
-							.should(QueryBuilders.matchQuery("Title", keyword))
-							.should(QueryBuilders.matchQuery("Description", keyword))
-							.must(QueryBuilders.matchQuery("Category", macroCategorySelected)))
-					.execute()
-					.actionGet();
-			
-			return (int) response.getCount();
+			//I have already this info, I just use it =)
+			return this.categorybyKeyword.get(this.macroCategorySelected);
 			
 		}catch(Exception e){
 			return 0;
