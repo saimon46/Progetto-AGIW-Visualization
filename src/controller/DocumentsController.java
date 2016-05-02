@@ -261,7 +261,7 @@ public class DocumentsController {
 			SearchResponse response =  ClientProvider.instance().getClient().prepareSearch(indexCatDoc)
 					.setTypes("page")
 					.setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
+					.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ContentIndex", keyword))
 														.should(QueryBuilders.matchQuery("Title", keyword))
 														.should(QueryBuilders.matchQuery("Description", keyword))
 														.must(QueryBuilders.matchQuery("Category", macroCategorySelected)))
