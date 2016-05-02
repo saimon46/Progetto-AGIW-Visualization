@@ -197,7 +197,8 @@ public class DocumentsController {
 		for(String category: listCategories){
 			
 			CountResponse response = ClientProvider.instance().getClient().prepareCount(indexCatDoc)
-					.setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("ContentIndex", keyword))
+					.setTypes("page")
+					.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ContentIndex", keyword))
 							.should(QueryBuilders.matchQuery("Title", keyword))
 							.should(QueryBuilders.matchQuery("Description", keyword))
 							.must(QueryBuilders.matchQuery("Category", category)))
